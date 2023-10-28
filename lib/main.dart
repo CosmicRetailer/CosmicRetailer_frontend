@@ -1,35 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => BookstoreAuth(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: MyHomePage(),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
+    ),
+  );
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text('Flutter Demo Home Page'),
       ),
       body: Center(
         child: Column(
@@ -37,8 +30,8 @@ class MyHomePage extends StatelessWidget {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                // Przejdź do ekranu logowania
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
               },
               child: Text('Log In', style: TextStyle(fontSize: 20)),
               style: ElevatedButton.styleFrom(primary: Colors.green),
@@ -46,8 +39,8 @@ class MyHomePage extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                // Przejdź do ekranu rejestracji
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SignUpScreen()));
               },
               child: Text('Sign Up', style: TextStyle(fontSize: 20)),
               style: ElevatedButton.styleFrom(primary: Colors.green),
@@ -90,7 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   labelText: 'Password',
                   suffixIcon: IconButton(
-                    icon: Icon(showPassword ? Icons.visibility : Icons.visibility_off),
+                    icon: Icon(
+                        showPassword ? Icons.visibility : Icons.visibility_off),
                     onPressed: () {
                       setState(() {
                         showPassword = !showPassword;
@@ -118,6 +112,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ElevatedButton(
               onPressed: () {
                 // Dodaj logikę logowania
+                Provider.of<BookstoreAuth>(context, listen: false)
+                    .setLoggedIn(true);
+                Navigator.pop(context);
               },
               child: Text('Log In', style: TextStyle(fontSize: 20)),
               style: ElevatedButton.styleFrom(primary: Colors.green),
@@ -128,7 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -152,13 +148,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             SizedBox(
               width: 300,
               child: TextFormField(
-                decoration: InputDecoration(labelText: 'Name'),
-              ),
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              width: 300,
-              child: TextFormField(
                 decoration: InputDecoration(labelText: 'Email'),
               ),
             ),
@@ -169,7 +158,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 decoration: InputDecoration(
                   labelText: 'Password',
                   suffixIcon: IconButton(
-                    icon: Icon(showPassword ? Icons.visibility : Icons.visibility_off),
+                    icon: Icon(
+                        showPassword ? Icons.visibility : Icons.visibility_off),
                     onPressed: () {
                       setState(() {
                         showPassword = !showPassword;
@@ -192,12 +182,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     });
                   },
                 ),
-                Text('I would like to receive your newsletter and other promotional information.'),
+                Text(
+                    'I would like to receive your newsletter and other promotional information.'),
               ],
             ),
             ElevatedButton(
               onPressed: () {
                 // Dodaj logikę rejestracji
+                Provider.of<BookstoreAuth>(context, listen: false)
+                    .setLoggedIn(true);
+                Navigator.pop(context);
               },
               child: Text('Sign Up', style: TextStyle(fontSize: 20)),
               style: ElevatedButton.styleFrom(primary: Colors.green),
@@ -206,5 +200,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+}
+
+class BookstoreAuth with ChangeNotifier {
+  bool _isLoggedIn = false;
+
+  bool get isLoggedIn => _isLoggedIn;
+
+  void setLoggedIn(bool value) {
+    _isLoggedIn = value;
+    notifyListeners();
   }
 }
