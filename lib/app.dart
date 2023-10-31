@@ -27,7 +27,9 @@ class _BookstoreState extends State<Bookstore> {
     /// Configure the parser with all of the app's allowed path templates.
     _routeParser = TemplateRouteParser(
       allowedPaths: [
+        '/main',
         '/signin',
+        '/signup',
         '/authors',
         '/settings',
         '/books/new',
@@ -37,7 +39,7 @@ class _BookstoreState extends State<Bookstore> {
         '/author/:authorId',
       ],
       guard: _guard,
-      initialRoute: '/signin',
+      initialRoute: '/main',
     );
 
     _routeState = RouteState(_routeParser);
@@ -85,10 +87,17 @@ class _BookstoreState extends State<Bookstore> {
   Future<ParsedRoute> _guard(ParsedRoute from) async {
     final signedIn = _auth.signedIn;
     final signInRoute = ParsedRoute('/signin', '/signin', {}, {});
+    final mainRoute = ParsedRoute('/main', '/main', {}, {});
+    final signUpRoute = ParsedRoute('/signup', '/signup', {}, {});
 
+    if (from == mainRoute && signedIn) {
+      return ParsedRoute('/books/popular', '/books/popular', {}, {});
+    }
     // Go to /signin if the user is not signed in
-    if (!signedIn && from != signInRoute) {
+    else if (!signedIn && from == signInRoute) {
       return signInRoute;
+    } else if (!signedIn && from == signUpRoute) {
+      return signUpRoute;
     }
     // Go to /books if the user is signed in and tries to go to /signin.
     else if (signedIn && from == signInRoute) {
@@ -99,7 +108,7 @@ class _BookstoreState extends State<Bookstore> {
 
   void _handleAuthStateChanged() {
     if (!_auth.signedIn) {
-      _routeState.go('/signin');
+      _routeState.go('/main');
     }
   }
 
