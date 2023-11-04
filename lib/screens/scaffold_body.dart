@@ -1,18 +1,15 @@
-// Copyright 2021, the Flutter project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
+import 'package:d_allegro/screens/product_page.dart';
 import 'package:flutter/material.dart';
 
 import '../routing.dart';
 import '../widgets/fade_transition_page.dart';
 import 'scaffold.dart';
 
-/// Displays the contents of the body of [BookstoreScaffold]
-class BookstoreScaffoldBody extends StatelessWidget {
+/// Displays the contents of the body of [CosmicRetailerScaffold]
+class CosmicRetailerScaffoldBody extends StatelessWidget {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  const BookstoreScaffoldBody({
+  const CosmicRetailerScaffoldBody({
     super.key,
   });
 
@@ -26,21 +23,21 @@ class BookstoreScaffoldBody extends StatelessWidget {
       key: navigatorKey,
       onPopPage: (route, dynamic result) => route.didPop(result),
       pages: [
-        if (currentRoute.pathTemplate.startsWith('/authors'))
+        if (currentRoute.pathTemplate.startsWith('/favorites'))
           const FadeTransitionPage<void>(
-            key: ValueKey('authors'),
-            child: Text('/authors'),
+            key: ValueKey('favorites'),
+            child: Text('/favorites'),
           )
         else if (currentRoute.pathTemplate.startsWith('/settings'))
           const FadeTransitionPage<void>(
             key: ValueKey('settings'),
-            child: Text('/settings'),
+            child: DescriptionPage(itemID: '65458734f2f7683a6b22e5e6'),
           )
-        else if (currentRoute.pathTemplate.startsWith('/books') ||
+        else if (currentRoute.pathTemplate.startsWith('/items') ||
             currentRoute.pathTemplate == '/')
           const FadeTransitionPage<void>(
-            key: ValueKey('books'),
-            child: Text('/books'),
+            key: ValueKey('items'),
+            child: Text('/items'),
           )
 
         // Avoid building a Navigator with an empty `pages` list when the

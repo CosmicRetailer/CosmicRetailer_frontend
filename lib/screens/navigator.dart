@@ -8,41 +8,39 @@ import '../screens/signup_screen.dart';
 import '../widgets/fade_transition_page.dart';
 import '../screens/scaffold.dart';
 
-class BookstoreNavigator extends StatefulWidget {
+class CosmicRetailerNavigator extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
 
-  const BookstoreNavigator({
+  const CosmicRetailerNavigator({
     required this.navigatorKey,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BookstoreNavigator> createState() => _BookstoreNavigatorState();
+  State<CosmicRetailerNavigator> createState() =>
+      _CosmicRetailerNavigatorState();
 }
 
-class _BookstoreNavigatorState extends State<BookstoreNavigator> {
+class _CosmicRetailerNavigatorState extends State<CosmicRetailerNavigator> {
   final _signInKey = const ValueKey('Sign in');
   final _startKey = const ValueKey('Start screen');
   final _signUpKey = const ValueKey('Sign up');
 
   final _scaffoldKey = const ValueKey('App scaffold');
-  final _bookDetailsKey = const ValueKey('Book details screen');
-  final _authorDetailsKey = const ValueKey('Author details screen');
+  final _itemDetailsKey = const ValueKey('Item details screen');
 
   @override
   Widget build(BuildContext context) {
     final routeState = RouteStateScope.of(context);
-    final authState = BookstoreAuthScope.of(context);
+    final authState = CosmicRetailerAuthScope.of(context);
 
     return Navigator(
       key: widget.navigatorKey,
       onPopPage: (route, result) {
         if (route.settings is Page) {
           final page = route.settings as Page;
-          if (page.key == _bookDetailsKey) {
-            routeState.go('/books/popular');
-          } else if (page.key == _authorDetailsKey) {
-            routeState.go('/authors');
+          if (page.key == _itemDetailsKey) {
+            routeState.go('/items/all');
           }
         }
         return route.didPop(result);
@@ -58,7 +56,7 @@ class _BookstoreNavigatorState extends State<BookstoreNavigator> {
                   credentials.password,
                 );
                 if (signedIn) {
-                  await routeState.go('/books/popular');
+                  await routeState.go('/items/all');
                 }
               },
             ),
@@ -66,7 +64,7 @@ class _BookstoreNavigatorState extends State<BookstoreNavigator> {
         else if (routeState.route.pathTemplate == '/main')
           FadeTransitionPage<void>(
             key: _signInKey,
-            child: MainScreen(),
+            child: const MainScreen(),
           )
         else if (routeState.route.pathTemplate == '/signup')
           FadeTransitionPage<void>(
@@ -83,24 +81,16 @@ class _BookstoreNavigatorState extends State<BookstoreNavigator> {
           // Display the app
           FadeTransitionPage<void>(
             key: _scaffoldKey,
-            child: const BookstoreScaffold(),
+            child: const CosmicRetailerScaffold(),
           ),
-          // Add an additional page to the stack if the user is viewing a book
-          // or an author
-          // if (selectedBook != null)
+          // Add an additional page to the stack if the user is viewing a item
+          // if (selectedItem!= null)
           //   MaterialPage<void>(
-          //     key: _bookDetailsKey,
-          //     child: BookDetailsScreen(
-          //       book: selectedBook,
+          //     key: _itemDetailsKey,
+          //     child: ItemDetailsScreen(
+          //       Item: selectedItem,
           //     ),
           //   )
-          // else if (selectedAuthor != null)
-          //   MaterialPage<void>(
-          //     key: _authorDetailsKey,
-          //     child: AuthorDetailsScreen(
-          //       author: selectedAuthor,
-          //     ),
-          //   ),
         ],
       ],
     );

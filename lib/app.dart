@@ -1,22 +1,18 @@
-// Copyright 2021, the Flutter project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 
 import 'auth.dart';
 import 'routing.dart';
 import 'screens/navigator.dart';
 
-class Bookstore extends StatefulWidget {
-  const Bookstore({super.key});
+class CosmicRetailer extends StatefulWidget {
+  const CosmicRetailer({super.key});
 
   @override
-  State<Bookstore> createState() => _BookstoreState();
+  State<CosmicRetailer> createState() => _CosmicRetailerState();
 }
 
-class _BookstoreState extends State<Bookstore> {
-  final _auth = BookstoreAuth();
+class _CosmicRetailerState extends State<CosmicRetailer> {
+  final _auth = CosmicRetailerAuth();
   final _navigatorKey = GlobalKey<NavigatorState>();
   late final RouteState _routeState;
   late final SimpleRouterDelegate _routerDelegate;
@@ -30,13 +26,10 @@ class _BookstoreState extends State<Bookstore> {
         '/main',
         '/signin',
         '/signup',
-        '/authors',
         '/settings',
-        '/books/new',
-        '/books/all',
-        '/books/popular',
-        '/book/:bookId',
-        '/author/:authorId',
+        '/items/all',
+        '/item/:itemId',
+        '/favorites'
       ],
       guard: _guard,
       initialRoute: '/main',
@@ -47,7 +40,7 @@ class _BookstoreState extends State<Bookstore> {
     _routerDelegate = SimpleRouterDelegate(
       routeState: _routeState,
       navigatorKey: _navigatorKey,
-      builder: (context) => BookstoreNavigator(
+      builder: (context) => CosmicRetailerNavigator(
         navigatorKey: _navigatorKey,
       ),
     );
@@ -61,7 +54,7 @@ class _BookstoreState extends State<Bookstore> {
   @override
   Widget build(BuildContext context) => RouteStateScope(
         notifier: _routeState,
-        child: BookstoreAuthScope(
+        child: CosmicRetailerAuthScope(
           notifier: _auth,
           child: MaterialApp.router(
             routerDelegate: _routerDelegate,
@@ -91,17 +84,13 @@ class _BookstoreState extends State<Bookstore> {
     final signUpRoute = ParsedRoute('/signup', '/signup', {}, {});
 
     if (from == mainRoute && signedIn) {
-      return ParsedRoute('/books/popular', '/books/popular', {}, {});
-    }
-    // Go to /signin if the user is not signed in
-    else if (!signedIn && from == signInRoute) {
+      return ParsedRoute('/items/all', '/items/all', {}, {});
+    } else if (!signedIn && from == signInRoute) {
       return signInRoute;
     } else if (!signedIn && from == signUpRoute) {
       return signUpRoute;
-    }
-    // Go to /books if the user is signed in and tries to go to /signin.
-    else if (signedIn && from == signInRoute) {
-      return ParsedRoute('/books/popular', '/books/popular', {}, {});
+    } else if (signedIn && from == signInRoute) {
+      return ParsedRoute('/items/all', '/items/all', {}, {});
     }
     return from;
   }

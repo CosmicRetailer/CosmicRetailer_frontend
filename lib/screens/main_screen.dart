@@ -10,7 +10,7 @@ class MainScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My App Home Page'),
+        title: const Text('My App Home Page'),
       ),
       body: Center(
         child: Column(
@@ -21,22 +21,22 @@ class MainScreen extends StatelessWidget {
                 routeState.go('/signin');
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.green,
-                minimumSize: Size(200, 60),
+                backgroundColor: Colors.green,
+                minimumSize: const Size(200, 60),
               ),
-              child: Text('Login',
+              child: const Text('Login',
                   style: TextStyle(fontSize: 20, color: Colors.white)),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 routeState.go('/signup');
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
-                minimumSize: Size(200, 60),
+                backgroundColor: Colors.blue,
+                minimumSize: const Size(200, 60),
               ),
-              child: Text('Register',
+              child: const Text('Register',
                   style: TextStyle(fontSize: 20, color: Colors.white)),
             ),
           ],

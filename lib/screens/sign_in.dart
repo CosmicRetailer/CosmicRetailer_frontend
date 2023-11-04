@@ -31,12 +31,12 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             routeState.go('/main');
           },
         ),
-        title: Text('Sign In'),
+        title: const Text('Sign In'),
       ),
       body: Center(
         child: Card(
@@ -77,7 +77,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       onTap: () {
                         // Tutaj możesz dodać logikę dla "Forgotten Password?"
                       },
-                      child: Text(
+                      child: const Text(
                         'Forgotten Password?',
                         style: TextStyle(
                           color: Colors.green,
