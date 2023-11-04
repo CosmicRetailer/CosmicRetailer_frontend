@@ -2,5 +2,5 @@ import 'package:d_allegro/app.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const Bookstore());
+  runApp(const CosmicRetailer());
 }
