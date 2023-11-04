@@ -2,6 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'package:d_allegro/screens/product_page.dart';
 import 'package:flutter/material.dart';
 
 import '../routing.dart';
@@ -34,7 +35,7 @@ class BookstoreScaffoldBody extends StatelessWidget {
         else if (currentRoute.pathTemplate.startsWith('/settings'))
           const FadeTransitionPage<void>(
             key: ValueKey('settings'),
-            child: Text('/settings'),
+            child: DescriptionPage(itemID: '65458734f2f7683a6b22e5e6'),
           )
         else if (currentRoute.pathTemplate.startsWith('/books') ||
             currentRoute.pathTemplate == '/')

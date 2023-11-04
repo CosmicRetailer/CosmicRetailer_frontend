@@ -66,7 +66,7 @@ class _BookstoreNavigatorState extends State<BookstoreNavigator> {
         else if (routeState.route.pathTemplate == '/main')
           FadeTransitionPage<void>(
             key: _signInKey,
-            child: MainScreen(),
+            child: const MainScreen(),
           )
         else if (routeState.route.pathTemplate == '/signup')
           FadeTransitionPage<void>(
