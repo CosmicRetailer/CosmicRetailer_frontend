@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../routing.dart'; // Zaimportuj plik routing.dart z odpowiednimi definicjami tras.
+import '../routing.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class Credentials {
   final String username;
@@ -13,8 +15,8 @@ class SignInScreen extends StatefulWidget {
 
   const SignInScreen({
     required this.onSignIn,
-    super.key,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -90,10 +92,11 @@ class _SignInScreenState extends State<SignInScreen> {
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: TextButton(
-                    onPressed: () async {
-                      widget.onSignIn(Credentials(
-                          _usernameController.value.text,
-                          _passwordController.value.text));
+                    onPressed: () {
+                      signInUser(
+                        _usernameController.text,
+                        _passwordController.text,
+                      );
                     },
                     child: const Text('Sign in'),
                   ),
@@ -104,5 +107,25 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> signInUser(String username, String password) async {
+    final url = Uri.parse('http://127.0.0.1:8080/login');
+    final response = await http.post(
+      url,
+      body: json.encode({
+        'nickname': username,
+        'password': password,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      // Pomyślne logowanie
+      // Tutaj można obsłużyć odpowiedź z backendu, jeśli jest dostępna
+    } else {
+      // Błąd logowania
+      print('Błąd logowania: ${response.statusCode}');
+    }
   }
 }

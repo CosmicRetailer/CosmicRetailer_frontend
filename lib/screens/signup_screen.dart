@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import '../routing.dart'; // Zaimportuj plik routing.dart z odpowiednimi definicjami tras.
+import 'package:http/http.dart' as http;
+import '../routing.dart';
 
 class Credentials {
-  final String name;
+  final String nickname;
   final String email;
   final String password;
 
-  Credentials(this.name, this.email, this.password);
+  Credentials(this.nickname, this.email, this.password);
 }
 
 class SignUpScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final _nameController = TextEditingController();
+  final _nicknameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -51,8 +52,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Text('Sign up',
                     style: Theme.of(context).textTheme.headlineMedium),
                 TextField(
-                  decoration: const InputDecoration(labelText: 'Name'),
-                  controller: _nameController,
+                  decoration: const InputDecoration(labelText: 'Nickname'),
+                  controller: _nicknameController,
                 ),
                 TextField(
                   decoration: const InputDecoration(labelText: 'Email'),
@@ -67,12 +68,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   padding: const EdgeInsets.all(16),
                   child: TextButton(
                     onPressed: () {
-                      // final credentials = Credentials(
-                      //   _nameController.value.text,
-                      //   _emailController.value.text,
-                      //   _passwordController.value.text,
-                      // );
-                      // widget.onSignUp(credentials);
+                      final nickname = _nicknameController.text;
+                      final email = _emailController.text;
+                      final password = _passwordController.text;
+
+                      final credentials =
+                          Credentials(nickname, email, password);
+                      widget.onSignUp(credentials);
                     },
                     child: const Text('Sign up'),
                   ),
@@ -83,5 +85,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+}
+
+Future<void> registerUser(
+    String nickname, String email, String password) async {
+  final url = Uri.parse('http://127.0.0.1:8080/register');
+  final response = await http.post(
+    url,
+    body: {
+      'nickname': nickname,
+      'email': email,
+      'password': password,
+    },
+  );
+
+  if (response.statusCode == 200) {
+    // Pomyślna rejestracja
+    // Tutaj można obsłużyć odpowiedź z backendu, jeśli jest dostępna
+  } else {
+    // Błąd rejestracji
+    print('Błąd rejestracji: ${response.statusCode}');
   }
 }

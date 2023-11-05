@@ -73,7 +73,7 @@ class _CosmicRetailerNavigatorState extends State<CosmicRetailerNavigator> {
               onSignUp: (credentials) {
                 // Tutaj możesz obsłużyć logikę rejestracji na podstawie dostarczonych danych
                 print(
-                    'Signed up with name: ${credentials.name}, email: ${credentials.email}, and password: ${credentials.password}');
+                    'Signed up with name: ${credentials.nickname}, email: ${credentials.email}, and password: ${credentials.password}');
               },
             ),
           )
