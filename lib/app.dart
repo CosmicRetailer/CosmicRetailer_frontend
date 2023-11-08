@@ -1,4 +1,5 @@
 import 'package:d_allegro/screens/main_screen.dart';
+import 'package:d_allegro/screens/scaffold.dart';
 import 'package:d_allegro/screens/sign_in.dart';
 import 'package:d_allegro/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,14 +11,6 @@ class CosmicRetailer extends StatefulWidget {
 
   @override
   State<CosmicRetailer> createState() => _CosmicRetailerState();
-}
-
-void someFunction() {
-  dio.get('/path').then((response) {
-    // Use the response
-  }).catchError((error) {
-    // Handle the error
-  });
 }
 
 class _CosmicRetailerState extends State<CosmicRetailer> {
@@ -53,7 +46,7 @@ class test extends StatelessWidget {
                   credentials.token,
                 );
                 if (signedIn && context.mounted) {
-                  Navigator.pushNamed(context, '/items/all');
+                  Navigator.pushNamed(context, '/main');
                 }
               },
             ),
@@ -80,7 +73,7 @@ class test extends StatelessWidget {
                 );
               },
             ),
-        '/items/all': (context) => const MainScreen(),
+        '/main': (context) => const CosmicRetailerScaffold(),
       },
       theme: ThemeData(
         useMaterial3: true,

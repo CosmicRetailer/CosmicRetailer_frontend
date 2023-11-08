@@ -1,25 +1,35 @@
 import 'package:adaptive_navigation/adaptive_navigation.dart';
+import 'package:d_allegro/screens/item_list.dart';
+import 'package:d_allegro/screens/product_page.dart';
 import 'package:flutter/material.dart';
-import 'scaffold_body.dart';
 
-class CosmicRetailerScaffold extends StatelessWidget {
+class CosmicRetailerScaffold extends StatefulWidget {
   const CosmicRetailerScaffold({
     super.key,
   });
+  @override
+  State<CosmicRetailerScaffold> createState() =>
+      _CosmicRetailerScaffoldeState();
+}
+
+class _CosmicRetailerScaffoldeState extends State<CosmicRetailerScaffold> {
+  final List<Widget> _widgetOptions = [
+    const Text('/favorites'),
+    const DescriptionPage(itemID: '65458734f2f7683a6b22e5e6'),
+    const ItemListPage()
+  ];
+  var _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final selectedIndex = _getSelectedIndex(
-      ModalRoute.of(context)!.settings.name,
-    );
     return Scaffold(
       body: AdaptiveNavigationScaffold(
-        selectedIndex: selectedIndex,
-        body: const CosmicRetailerScaffoldBody(),
+        selectedIndex: _selectedIndex,
+        body: _widgetOptions.elementAt(_selectedIndex),
         onDestinationSelected: (idx) {
-          if (idx == 0) Navigator.pushNamed(context, '/items/all');
-          if (idx == 1) Navigator.pushNamed(context, '/favorites');
-          if (idx == 2) Navigator.pushNamed(context, '/settings');
+          setState(() {
+            _selectedIndex = idx;
+          });
         },
         destinations: const [
           AdaptiveScaffoldDestination(
@@ -37,13 +47,5 @@ class CosmicRetailerScaffold extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  int _getSelectedIndex(String? pathTemplate) {
-    if (pathTemplate == null) return 0;
-    if (pathTemplate.startsWith('/items')) return 0;
-    if (pathTemplate == '/favorites') return 1;
-    if (pathTemplate == '/settings') return 2;
-    return 0;
   }
 }
