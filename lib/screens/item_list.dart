@@ -9,6 +9,8 @@ class ItemListPage extends StatefulWidget {
 
 class _ItemListPageState extends State<ItemListPage> {
   late Future<List<dynamic>?> items;
+  TextEditingController searchController =
+      TextEditingController(); // Kontroler pola wyszukiwania
 
   @override
   void initState() {
@@ -32,8 +34,16 @@ class _ItemListPageState extends State<ItemListPage> {
     }
   }
 
-  List<dynamic>? filterItemsWithNames(List<dynamic>? items) {
-    return items?.where((item) => item['name'] != null).toList();
+  List<dynamic>? filterItemsWithNames(
+      List<dynamic>? items, String searchQuery) {
+    return items
+        ?.where((item) =>
+            item['name'] != null &&
+            item['name']
+                .toString()
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase()))
+        .toList();
   }
 
   @override
@@ -42,53 +52,74 @@ class _ItemListPageState extends State<ItemListPage> {
       appBar: AppBar(
         title: Text('Lista Przedmiotów'),
       ),
-      body: FutureBuilder<List<dynamic>?>(
-        future: items,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            final filteredItems = filterItemsWithNames(snapshot.data);
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: searchController,
+              onChanged: (value) {
+                setState(() {}); // Odśwież widok po zmianie pola wyszukiwania
+              },
+              decoration: InputDecoration(
+                labelText: 'Szukaj przedmiotu...',
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<List<dynamic>?>(
+              future: items,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  final filteredItems = filterItemsWithNames(
+                      snapshot.data, searchController.text);
 
-            if (filteredItems != null && filteredItems.isNotEmpty) {
-              return ListView.builder(
-                itemCount: filteredItems.length,
-                itemBuilder: (context, index) {
-                  final item = filteredItems[index];
-                  final imageUrl = item['photo'];
-                  final title = item['name'];
-                  final price = item['price'] != null
-                      ? double.parse(item['price'].toString())
-                      : 0.0; // Konwersja ceny na double
-                  return Column(
-                    children: [
-                      Image.network(
-                        imageUrl,
-                        height: 200,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                      Text(
-                        title,
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      Text(
-                        'Price: \$${price.toStringAsFixed(2)}', // Formatowanie ceny jako double z dwoma miejscami po przecinku
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  );
-                },
-              );
-            } else {
-              return Center(child: Text('No items available with names.'));
-            }
-          } else {
-            return Center(child: Text('No items available.'));
-          }
-        },
+                  if (filteredItems != null && filteredItems.isNotEmpty) {
+                    return ListView.builder(
+                      itemCount: filteredItems.length,
+                      itemBuilder: (context, index) {
+                        final item = filteredItems[index];
+                        final imageUrl = item['photo'];
+                        final title = item['name'];
+                        final price = item['price'] != null
+                            ? double.parse(item['price'].toString())
+                            : 0.0;
+                        return Column(
+                          children: [
+                            Image.network(
+                              imageUrl,
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                            Text(
+                              title,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              'Price: \$${price.toStringAsFixed(2)}',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    return Center(
+                        child: Text('Brak przedmiotów o podanej nazwie.'));
+                  }
+                } else {
+                  return Center(child: Text('Brak dostępnych przedmiotów.'));
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
