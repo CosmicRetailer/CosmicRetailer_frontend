@@ -1,5 +1,6 @@
 import 'package:d_allegro/screens/product_page.dart';
 import 'package:flutter/material.dart';
+import 'package:d_allegro/screens/item_list.dart';
 
 import '../routing.dart';
 import '../widgets/fade_transition_page.dart';
@@ -35,9 +36,9 @@ class CosmicRetailerScaffoldBody extends StatelessWidget {
           )
         else if (currentRoute.pathTemplate.startsWith('/items') ||
             currentRoute.pathTemplate == '/')
-          const FadeTransitionPage<void>(
+          FadeTransitionPage<void>(
             key: ValueKey('items'),
-            child: Text('/items'),
+            child: ItemListPage(),
           )
 
         // Avoid building a Navigator with an empty `pages` list when the

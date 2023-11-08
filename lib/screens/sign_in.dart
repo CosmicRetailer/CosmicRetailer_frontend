@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 class Credentials {
   final String username;
   final String password;
-
-  Credentials(this.username, this.password);
+  final String token;
+  Credentials(this.username, this.password, this.token);
 }
 
 class SignInScreen extends StatefulWidget {
@@ -27,9 +27,30 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 
+  Future<void> showLoginErrorDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Błąd logowania'),
+          content: Text('Wystąpił problem z logowaniem. Spróbuj ponownie.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Zamyka alert
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final routeState = RouteStateScope.of(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -52,7 +73,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 Text('Sign in',
                     style: Theme.of(context).textTheme.headlineMedium),
                 TextField(
-                  decoration: const InputDecoration(labelText: 'Email'),
+                  decoration: const InputDecoration(labelText: 'Username'),
                   controller: _usernameController,
                 ),
                 TextField(
@@ -94,6 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: TextButton(
                     onPressed: () {
                       signInUser(
+                        context,
                         _usernameController.text,
                         _passwordController.text,
                       );
@@ -109,23 +131,18 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Future<void> signInUser(String username, String password) async {
-    final url = Uri.parse('http://127.0.0.1:8080/login');
-    final response = await http.post(
-      url,
-      body: json.encode({
-        'nickname': username,
-        'password': password,
-      }),
-      headers: {'Content-Type': 'application/json'},
-    );
-
+  Future<void> signInUser(
+      BuildContext context, String username, String password) async {
+    final response = await http.post(Uri.parse('http://10.0.2.2:8080/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'nickname': username, 'password': password}));
     if (response.statusCode == 200) {
-      // Pomyślne logowanie
-      // Tutaj można obsłużyć odpowiedź z backendu, jeśli jest dostępna
+      final responseBody = json.decode(response.body);
+      final token = responseBody['access_token'];
+      final credentials = Credentials(username, password, token);
+      widget.onSignIn(credentials);
     } else {
-      // Błąd logowania
-      print('Błąd logowania: ${response.statusCode}');
+      showLoginErrorDialog(context); // Wyświetl alert o błędzie logowania
     }
   }
 }

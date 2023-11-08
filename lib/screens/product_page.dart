@@ -23,10 +23,10 @@ class _DescriptionPageState extends State<DescriptionPage> {
 
   Future<Map<String, dynamic>> fetchItemDetails(String itemID) async {
     final response = await http.get(
-      Uri.parse('http://127.0.0.1:8080/get_item/$itemID'),
+      Uri.parse('http://10.0.2.2:8080/get_item/$itemID'),
       headers: {
         'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjU0M2UzMzRhZWM0ZTJhMmNiMzMyMTczIiwic3ViIjoiNjU0M2UzMzRhZWM0ZTJhMmNiMzMyMTczIiwiZXhwIjoxNjk5MTQxNzQ1fQ.R9gPs1E7yStsNCwBZmf1ynkjXdJxPfDIpu9vzXvRKf4',
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjU0ODEzNGQ1ZGE2ZjliNjRjMDhhYmY2Iiwic3ViIjoiNjU0ODEzNGQ1ZGE2ZjliNjRjMDhhYmY2IiwiZXhwIjoxNjk5NDcyNDM0fQ.Jtu8I3zuIwor81cO6r1szxXGicNjreXmUhJtRIaEwO8',
       },
     );
 

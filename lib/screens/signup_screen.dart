@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import '../routing.dart';
+import 'package:http/http.dart' as http;
 
 class Credentials {
   final String nickname;
@@ -26,6 +26,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _nicknameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  Future<void> showRegisterErrorDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Błąd rejestracji'),
+          content: Text('Wystąpił problem z rejestracją. Spróbuj ponownie.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Zamyka alert
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,13 +88,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   padding: const EdgeInsets.all(16),
                   child: TextButton(
                     onPressed: () {
-                      final nickname = _nicknameController.text;
-                      final email = _emailController.text;
-                      final password = _passwordController.text;
-
-                      final credentials =
-                          Credentials(nickname, email, password);
-                      widget.onSignUp(credentials);
+                      registerUser(_nicknameController.text,
+                          _emailController.text, _passwordController.text);
                     },
                     child: const Text('Sign up'),
                   ),
@@ -86,25 +101,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-}
 
-Future<void> registerUser(
-    String nickname, String email, String password) async {
-  final url = Uri.parse('http://127.0.0.1:8080/register');
-  final response = await http.post(
-    url,
-    body: {
-      'nickname': nickname,
-      'email': email,
-      'password': password,
-    },
-  );
+  Future<void> registerUser(
+      String nickname, String email, String password) async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:8080/register'),
+      body: {
+        'email': email,
+        'nickname': nickname,
+        'password': password,
+      },
+    );
 
-  if (response.statusCode == 200) {
-    // Pomyślna rejestracja
-    // Tutaj można obsłużyć odpowiedź z backendu, jeśli jest dostępna
-  } else {
-    // Błąd rejestracji
-    print('Błąd rejestracji: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      final credentials = Credentials(nickname, email, password);
+      widget.onSignUp(credentials);
+    } else {
+      showRegisterErrorDialog(context); // Wyświetl alert o błędzie logowania
+    }
   }
 }

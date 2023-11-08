@@ -48,22 +48,23 @@ class _CosmicRetailerNavigatorState extends State<CosmicRetailerNavigator> {
       pages: [
         if (routeState.route.pathTemplate == '/signin')
           FadeTransitionPage<void>(
-            key: _startKey,
+            key: _signInKey,
             child: SignInScreen(
               onSignIn: (credentials) async {
                 var signedIn = await authState.signIn(
                   credentials.username,
                   credentials.password,
+                  credentials.token,
                 );
                 if (signedIn) {
-                  await routeState.go('/items/all');
+                  routeState.go('/items/all');
                 }
               },
             ),
           )
         else if (routeState.route.pathTemplate == '/main')
           FadeTransitionPage<void>(
-            key: _signInKey,
+            key: _startKey,
             child: const MainScreen(),
           )
         else if (routeState.route.pathTemplate == '/signup')
@@ -71,9 +72,25 @@ class _CosmicRetailerNavigatorState extends State<CosmicRetailerNavigator> {
             key: _signUpKey,
             child: SignUpScreen(
               onSignUp: (credentials) {
-                // Tutaj możesz obsłużyć logikę rejestracji na podstawie dostarczonych danych
-                print(
-                    'Signed up with name: ${credentials.nickname}, email: ${credentials.email}, and password: ${credentials.password}');
+                // Tutaj wyświetl alert
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Rejestracja'),
+                      content: const Text('Pomyślna rejestracja.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Zamyka alert
+                            routeState.go('/main');
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
             ),
           )

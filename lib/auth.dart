@@ -3,8 +3,9 @@ import 'package:flutter/widgets.dart';
 /// A mock authentication service
 class CosmicRetailerAuth extends ChangeNotifier {
   bool _signedIn = false;
-
+  String _token = '';
   bool get signedIn => _signedIn;
+  String get token => _token;
 
   Future<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
@@ -13,9 +14,9 @@ class CosmicRetailerAuth extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> signIn(String username, String password) async {
+  Future<bool> signIn(String username, String password, String tokenac) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-
+    _token = tokenac;
     // Sign in. Allow any password.
     _signedIn = true;
     notifyListeners();
