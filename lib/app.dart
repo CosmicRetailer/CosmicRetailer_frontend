@@ -47,7 +47,8 @@ class CosmicRetailerApp extends StatelessWidget {
                   credentials.token,
                 );
                 if (signedIn && context.mounted) {
-                  Navigator.pushNamed(context, '/main');
+                  Navigator.of(context).pop();
+                  Navigator.pushReplacementNamed(context, '/main');
                 }
               },
             ),
@@ -64,7 +65,7 @@ class CosmicRetailerApp extends StatelessWidget {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop(); // Zamyka alert
-                            Navigator.pushNamed(context, '/main');
+                            Navigator.pushReplacementNamed(context, '/main');
                           },
                           child: const Text('OK'),
                         ),
