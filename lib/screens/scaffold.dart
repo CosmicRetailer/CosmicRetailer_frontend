@@ -1,7 +1,5 @@
 import 'package:adaptive_navigation/adaptive_navigation.dart';
 import 'package:flutter/material.dart';
-
-import '../routing.dart';
 import 'scaffold_body.dart';
 
 class CosmicRetailerScaffold extends StatelessWidget {
@@ -11,17 +9,17 @@ class CosmicRetailerScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final routeState = RouteStateScope.of(context);
-    final selectedIndex = _getSelectedIndex(routeState.route.pathTemplate);
-
+    final selectedIndex = _getSelectedIndex(
+      ModalRoute.of(context)!.settings.name,
+    );
     return Scaffold(
       body: AdaptiveNavigationScaffold(
         selectedIndex: selectedIndex,
         body: const CosmicRetailerScaffoldBody(),
         onDestinationSelected: (idx) {
-          if (idx == 0) routeState.go('/items/all');
-          if (idx == 1) routeState.go('/favorites');
-          if (idx == 2) routeState.go('/settings');
+          if (idx == 0) Navigator.pushNamed(context, '/items/all');
+          if (idx == 1) Navigator.pushNamed(context, '/favorites');
+          if (idx == 2) Navigator.pushNamed(context, '/settings');
         },
         destinations: const [
           AdaptiveScaffoldDestination(
@@ -41,7 +39,8 @@ class CosmicRetailerScaffold extends StatelessWidget {
     );
   }
 
-  int _getSelectedIndex(String pathTemplate) {
+  int _getSelectedIndex(String? pathTemplate) {
+    if (pathTemplate == null) return 0;
     if (pathTemplate.startsWith('/items')) return 0;
     if (pathTemplate == '/favorites') return 1;
     if (pathTemplate == '/settings') return 2;

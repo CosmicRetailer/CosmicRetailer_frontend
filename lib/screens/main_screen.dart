@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import '../routing.dart'; // Zaimportuj plik routing.dart z odpowiednimi definicjami tras.
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final routeState = RouteStateScope.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('My App Home Page'),
@@ -18,7 +15,7 @@ class MainScreen extends StatelessWidget {
           children: <Widget>[
             ElevatedButton(
               onPressed: () {
-                routeState.go('/signin');
+                Navigator.pushNamed(context, '/signin');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
@@ -30,7 +27,7 @@ class MainScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                routeState.go('/signup');
+                Navigator.pushNamed(context, '/signup');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,

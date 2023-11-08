@@ -2,6 +2,8 @@ import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
 
 class ItemListPage extends StatefulWidget {
+  const ItemListPage({super.key});
+
   @override
   _ItemListPageState createState() => _ItemListPageState();
 }
@@ -43,7 +45,7 @@ class _ItemListPageState extends State<ItemListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Lista Przedmiotów'),
+        title: const Text('Lista Przedmiotów'),
       ),
       body: Column(
         children: [
@@ -54,7 +56,7 @@ class _ItemListPageState extends State<ItemListPage> {
               onChanged: (value) {
                 setState(() {}); // Odśwież widok po zmianie pola wyszukiwania
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Szukaj przedmiotu...',
                 prefixIcon: Icon(Icons.search),
               ),
@@ -65,7 +67,7 @@ class _ItemListPageState extends State<ItemListPage> {
               future: items,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
@@ -92,22 +94,23 @@ class _ItemListPageState extends State<ItemListPage> {
                             ),
                             Text(
                               title,
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
                             ),
                             Text(
                               'Price: \$${price.toStringAsFixed(2)}',
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
                             ),
                           ],
                         );
                       },
                     );
                   } else {
-                    return Center(
+                    return const Center(
                         child: Text('Brak przedmiotów o podanej nazwie.'));
                   }
                 } else {
-                  return Center(child: Text('Brak dostępnych przedmiotów.'));
+                  return const Center(
+                      child: Text('Brak dostępnych przedmiotów.'));
                 }
               },
             ),
