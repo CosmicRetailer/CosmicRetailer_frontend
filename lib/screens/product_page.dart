@@ -48,7 +48,6 @@ class _DescriptionPageState extends State<DescriptionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: const Icon(Icons.arrow_back, color: Colors.black),
         title: Text('Item Page',
             style: TextStyle(color: Colors.black, fontSize: titleSize)),
         centerTitle: true,
