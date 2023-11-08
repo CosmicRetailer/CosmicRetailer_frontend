@@ -1,3 +1,4 @@
+import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -104,7 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> registerUser(
       String nickname, String email, String password) async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8080/register'),
+      Uri.parse('$apiURL/register'),
       body: {
         'email': email,
         'nickname': nickname,
