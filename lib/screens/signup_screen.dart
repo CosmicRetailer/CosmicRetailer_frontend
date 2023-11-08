@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../routing.dart';
 import 'package:http/http.dart' as http;
 
 class Credentials {
@@ -32,14 +31,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Błąd rejestracji'),
-          content: Text('Wystąpił problem z rejestracją. Spróbuj ponownie.'),
+          title: const Text('Błąd rejestracji'),
+          content:
+              const Text('Wystąpił problem z rejestracją. Spróbuj ponownie.'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Zamyka alert
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -49,13 +49,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final routeState = RouteStateScope.of(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            routeState.go('/main');
+            Navigator.pop(context);
           },
         ),
         title: const Text('Sign up'),
@@ -117,7 +116,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       final credentials = Credentials(nickname, email, password);
       widget.onSignUp(credentials);
     } else {
-      showRegisterErrorDialog(context); // Wyświetl alert o błędzie logowania
+      if (context.mounted) {
+        showRegisterErrorDialog(context);
+      } // Wyświetl alert o błędzie logowania
     }
   }
 }

@@ -1,5 +1,5 @@
+import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
-import '../routing.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -32,14 +32,15 @@ class _SignInScreenState extends State<SignInScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Błąd logowania'),
-          content: Text('Wystąpił problem z logowaniem. Spróbuj ponownie.'),
+          title: const Text('Błąd logowania'),
+          content:
+              const Text('Wystąpił problem z logowaniem. Spróbuj ponownie.'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Zamyka alert
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -49,14 +50,12 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final routeState = RouteStateScope.of(context);
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            routeState.go('/main');
+            Navigator.pop(context);
           },
         ),
         title: const Text('Sign In'),
@@ -133,7 +132,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> signInUser(
       BuildContext context, String username, String password) async {
-    final response = await http.post(Uri.parse('http://10.0.2.2:8080/login'),
+    final response = await http.post(Uri.parse('$apiURL/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'nickname': username, 'password': password}));
     if (response.statusCode == 200) {
@@ -142,7 +141,9 @@ class _SignInScreenState extends State<SignInScreen> {
       final credentials = Credentials(username, password, token);
       widget.onSignIn(credentials);
     } else {
-      showLoginErrorDialog(context); // Wyświetl alert o błędzie logowania
+      if (context.mounted) {
+        showLoginErrorDialog(context);
+      } // Wyświetl alert o błędzie logowania
     }
   }
 }
