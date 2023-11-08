@@ -14,9 +14,9 @@ class CosmicRetailerScaffold extends StatefulWidget {
 
 class _CosmicRetailerScaffoldeState extends State<CosmicRetailerScaffold> {
   final List<Widget> _widgetOptions = [
+    const ItemListPage(),
     const Text('/favorites'),
     const DescriptionPage(itemID: '65458734f2f7683a6b22e5e6'),
-    const ItemListPage()
   ];
   var _selectedIndex = 0;
 
