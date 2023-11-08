@@ -1,6 +1,5 @@
-import 'dart:convert';
+import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class ItemListPage extends StatefulWidget {
   @override
@@ -19,16 +18,10 @@ class _ItemListPageState extends State<ItemListPage> {
   }
 
   Future<List<dynamic>?> fetchItems() async {
-    final response = await http.get(
-      Uri.parse('http://10.0.2.2:8080/all_items'),
-      headers: {
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjU0ODEzNGQ1ZGE2ZjliNjRjMDhhYmY2Iiwic3ViIjoiNjU0ODEzNGQ1ZGE2ZjliNjRjMDhhYmY2IiwiZXhwIjoxNjk5NDcyNDM0fQ.Jtu8I3zuIwor81cO6r1szxXGicNjreXmUhJtRIaEwO8',
-      },
-    );
+    final response = await dio.get('http://localhost:8080/all_items');
 
     if (response.statusCode == 200) {
-      return json.decode(response.body)['items'];
+      return response.data['items'];
     } else {
       throw Exception('Failed to load items');
     }

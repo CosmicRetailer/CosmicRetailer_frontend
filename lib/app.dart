@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'http_client.dart';
 import 'auth.dart';
 import 'routing.dart';
 import 'screens/navigator.dart';
@@ -9,6 +9,14 @@ class CosmicRetailer extends StatefulWidget {
 
   @override
   State<CosmicRetailer> createState() => _CosmicRetailerState();
+}
+
+void someFunction() {
+  dio.get('/path').then((response) {
+    // Use the response
+  }).catchError((error) {
+    // Handle the error
+  });
 }
 
 class _CosmicRetailerState extends State<CosmicRetailer> {
@@ -47,6 +55,7 @@ class _CosmicRetailerState extends State<CosmicRetailer> {
 
     // Listen for when the user logs out and display the signin screen.
     _auth.addListener(_handleAuthStateChanged);
+    dioAuth = _auth;
 
     super.initState();
   }
