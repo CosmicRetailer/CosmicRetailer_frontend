@@ -20,7 +20,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
   }
 
   Future<Map<String, dynamic>> fetchItemDetails(String itemID) async {
-    final response = await dio.get('http://localhost:8080/get_item/$itemID');
+    final response = await dio.get('$apiURL/get_item/$itemID');
 
     if (response.statusCode == 200) {
       return response.data;

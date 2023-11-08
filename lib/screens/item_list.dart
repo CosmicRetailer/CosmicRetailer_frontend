@@ -20,7 +20,7 @@ class _ItemListPageState extends State<ItemListPage> {
   }
 
   Future<List<dynamic>?> fetchItems() async {
-    final response = await dio.get('http://localhost:8080/all_items');
+    final response = await dio.get('$apiURL/all_items');
 
     if (response.statusCode == 200) {
       return response.data['items'];

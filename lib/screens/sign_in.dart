@@ -1,3 +1,4 @@
+import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -131,7 +132,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> signInUser(
       BuildContext context, String username, String password) async {
-    final response = await http.post(Uri.parse('http://localhost:8080/login'),
+    final response = await http.post(Uri.parse('$apiURL/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'nickname': username, 'password': password}));
     if (response.statusCode == 200) {

@@ -18,3 +18,5 @@ Dio createDio() {
 }
 
 final Dio dio = createDio();
+
+const String apiURL = 'http://localhost:8080';

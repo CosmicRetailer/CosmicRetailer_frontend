@@ -25,12 +25,13 @@ class _CosmicRetailerState extends State<CosmicRetailer> {
 
   @override
   Widget build(BuildContext context) {
-    return CosmicRetailerAuthScope(notifier: _auth, child: const test());
+    return CosmicRetailerAuthScope(
+        notifier: _auth, child: const CosmicRetailerApp());
   }
 }
 
-class test extends StatelessWidget {
-  const test({Key? key}) : super(key: key);
+class CosmicRetailerApp extends StatelessWidget {
+  const CosmicRetailerApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final authState = CosmicRetailerAuthScope.of(context);
