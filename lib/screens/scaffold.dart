@@ -1,7 +1,7 @@
 import 'package:adaptive_navigation/adaptive_navigation.dart';
 import 'package:d_allegro/screens/add_item.dart';
 import 'package:d_allegro/screens/item_list.dart';
-import 'package:d_allegro/screens/product_page.dart';
+import 'package:d_allegro/screens/profile.dart';
 import 'package:flutter/material.dart';
 
 class CosmicRetailerScaffold extends StatefulWidget {
@@ -18,7 +18,7 @@ class _CosmicRetailerScaffoldeState extends State<CosmicRetailerScaffold> {
     const ItemListPage(),
     const Text('Favorites'),
     const Additem(),
-    const DescriptionPage(itemID: '65458734f2f7683a6b22e5e6'),
+    const UserProfilePage(userID: '65458734f2f7683a6b22e5e6'),
   ];
   var _selectedIndex = 0;
 

@@ -97,9 +97,8 @@ class _AdditemState extends State<Additem> {
         'description': _descriptionController.text,
         'category': _category,
         // The image handling depends on your API
-        'photo': _image != null
-            ? await MultipartFile.fromFile(_image!.path, filename: 'AV 6.png')
-            : null,
+        'photo':
+            _image != null ? await MultipartFile.fromFile(_image!.path) : null,
       }),
     );
 
