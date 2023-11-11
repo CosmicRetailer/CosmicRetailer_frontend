@@ -119,7 +119,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     } else {
       if (context.mounted) {
         showRegisterErrorDialog(context);
-      } // Wyświetl alert o błędzie logowania
+      }
     }
   }
 }

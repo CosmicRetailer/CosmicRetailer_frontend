@@ -53,16 +53,15 @@ class _AdditemState extends State<Additem> {
 
   Widget _buildImagePicker() {
     return InkWell(
-      onTap: _pickImage, // Call the same function to change the image
+      onTap: _pickImage,
       child: _image != null
-          ? Image.file(_image!, width: 100, height: 300, fit: BoxFit.fitHeight)
+          ? Image.file(_image!, width: 100, height: 300, fit: BoxFit.contain)
           : const Icon(Icons.camera_alt, size: 100.0),
     );
   }
 
   Future<void> _submitItem() async {
     if (_formKey.currentState!.validate()) {
-      // You might want to include the image and other details in your request
       try {
         final response = await addItem();
         if (context.mounted) {
@@ -87,7 +86,6 @@ class _AdditemState extends State<Additem> {
   }
 
   Future<Map<String, dynamic>> addItem() async {
-    // Assuming `dio` is a global instance of Dio
     final response = await dio.post(
       '$apiURL/add_item',
       data: FormData.fromMap({
@@ -96,7 +94,6 @@ class _AdditemState extends State<Additem> {
         'quantity': _quantityController.text,
         'description': _descriptionController.text,
         'category': _category,
-        // The image handling depends on your API
         'photo':
             _image != null ? await MultipartFile.fromFile(_image!.path) : null,
       }),
