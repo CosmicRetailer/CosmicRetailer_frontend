@@ -11,19 +11,17 @@ class _SettingsState extends State<SettingsPage> {
   late Future<Map<String, dynamic>> currentSettings;
   final _formKey = GlobalKey<FormState>();
 
-  // Define controllers for each form field
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _nicknameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  String _selectedCountry = 'Country 1'; // Default value
+  String _selectedCountry = 'Country 1';
 
-  // Dummy list of countries for the dropdown
   final List<String> _countries = ['Country 1', 'Country 2', 'Country 3'];
 
   Future<Map<String, dynamic>?> editSettings() async {
-    //todo call to backend
+    //TODO call to backend
     return null;
     // if (response.statusCode == 200) {
     //   return response.data;
@@ -112,7 +110,6 @@ class _SettingsState extends State<SettingsPage> {
 
   @override
   void dispose() {
-    // Dispose controllers when the widget is removed from the widget tree
     _fullNameController.dispose();
     _nicknameController.dispose();
     _emailController.dispose();

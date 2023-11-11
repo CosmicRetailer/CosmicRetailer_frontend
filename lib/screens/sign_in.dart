@@ -38,7 +38,7 @@ class _SignInScreenState extends State<SignInScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Zamyka alert
+                Navigator.of(context).pop();
               },
               child: const Text('OK'),
             ),
@@ -96,9 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        // Tutaj możesz dodać logikę dla "Forgotten Password?"
-                      },
+                      onTap: () {},
                       child: const Text(
                         'Forgotten Password?',
                         style: TextStyle(
@@ -143,7 +141,7 @@ class _SignInScreenState extends State<SignInScreen> {
     } else {
       if (context.mounted) {
         showLoginErrorDialog(context);
-      } // Wyświetl alert o błędzie logowania
+      }
     }
   }
 }

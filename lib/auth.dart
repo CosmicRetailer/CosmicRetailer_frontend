@@ -9,7 +9,6 @@ class CosmicRetailerAuth extends ChangeNotifier {
 
   Future<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    // Sign out.
     _signedIn = false;
     notifyListeners();
   }
@@ -17,7 +16,6 @@ class CosmicRetailerAuth extends ChangeNotifier {
   Future<bool> signIn(String username, String password, String tokenac) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
     _token = tokenac;
-    // Sign in. Allow any password.
     _signedIn = true;
     notifyListeners();
     return _signedIn;

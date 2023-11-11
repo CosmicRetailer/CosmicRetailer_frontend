@@ -39,7 +39,7 @@ class CosmicRetailerApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => const MainScreen(), // Główny ekran aplikacji
+        '/': (context) => const MainScreen(),
         '/signin': (context) => SignInScreen(
               onSignIn: (credentials) async {
                 var signedIn = await authState.signIn(
@@ -55,7 +55,6 @@ class CosmicRetailerApp extends StatelessWidget {
             ),
         '/signup': (context) => SignUpScreen(
               onSignUp: (credentials) {
-                // Tutaj wyświetl alert
                 showDialog(
                   context: context,
                   builder: (context) {
@@ -65,7 +64,7 @@ class CosmicRetailerApp extends StatelessWidget {
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pop(); // Zamyka alert
+                            Navigator.of(context).pop();
                             Navigator.pushReplacementNamed(context, '/main');
                           },
                           child: const Text('OK'),

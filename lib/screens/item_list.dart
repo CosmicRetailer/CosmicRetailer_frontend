@@ -10,8 +10,7 @@ class ItemListPage extends StatefulWidget {
 
 class _ItemListPageState extends State<ItemListPage> {
   late Future<List<dynamic>?> items;
-  TextEditingController searchController =
-      TextEditingController(); // Kontroler pola wyszukiwania
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
