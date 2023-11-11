@@ -15,11 +15,12 @@ class _ItemListPageState extends State<ItemListPage> {
   @override
   void initState() {
     super.initState();
-    items = fetchItems();
+    // Inicjalizacja Future bez pobierania danych, bo chcemy to zrobić po naciśnięciu przycisku Search
+    items = Future.value(null);
   }
 
-  Future<List<dynamic>?> fetchItems() async {
-    final response = await dio.get('$apiURL/all_items');
+  Future<List<dynamic>?> fetchItems(String searchQuery) async {
+    final response = await dio.get('$apiURL/all_items?q=$searchQuery');
 
     if (response.statusCode == 200) {
       return response.data['items'];
@@ -45,19 +46,69 @@ class _ItemListPageState extends State<ItemListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lista Przedmiotów'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(
+              onPressed: () async {
+                // Implement search functionality
+                // Pobierz dane dopiero po naciśnięciu przycisku Search
+                final searchQuery = searchController.text;
+                final fetchedItems = await fetchItems(searchQuery);
+                setState(() {
+                  items = Future.value(fetchedItems);
+                });
+              },
+              child: Text(
+                'Search',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: searchController,
-              onChanged: (value) {
-                setState(() {});
-              },
-              decoration: const InputDecoration(
-                labelText: 'Szukaj przedmiotu...',
-                prefixIcon: Icon(Icons.search),
+            child: Row(
+              children: [
+                // Left side Filter
+                TextButton(
+                  onPressed: () {
+                    // Implement filter functionality
+                    // Możesz dodać kod obsługujący filtrowanie
+                    // na przykład otwierając okno dialogowe z opcjami filtrowania.
+                    print('Filter pressed');
+                  },
+                  child: Row(
+                    children: [
+                      Icon(Icons.filter_list),
+                      SizedBox(width: 8),
+                      Text(
+                        'Filter',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+                Spacer(), // Spacer to push Search to the right
+                // Right side Search
+              ],
+            ),
+          ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  // Nie potrzebujemy setState w tej funkcji
+                },
+                decoration: const InputDecoration(
+                  labelText: 'Szukaj przedmiotu...',
+                  prefixIcon: Icon(Icons.search),
+                ),
               ),
             ),
           ),

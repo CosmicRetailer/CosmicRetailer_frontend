@@ -46,7 +46,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              // Handle logout tap
+            },
           ),
         ],
       ),
