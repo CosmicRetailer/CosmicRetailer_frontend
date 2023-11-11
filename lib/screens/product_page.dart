@@ -31,16 +31,11 @@ class _DescriptionPageState extends State<DescriptionPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Using MediaQuery to get screen size
     Size screenSize = MediaQuery.of(context).size;
-    double widthFactor = screenSize.width > 600
-        ? 0.4
-        : 0.5; // Example threshold for responsiveness
+    double widthFactor = screenSize.width > 600 ? 0.4 : 0.5;
 
-    // Responsive padding
     double padding = screenSize.width > 600 ? 24 : 16;
 
-    // Responsive text sizes
     double titleSize = screenSize.width > 600 ? 24 : 20;
     double priceSize = screenSize.width > 600 ? 28 : 24;
     double descriptionSize = screenSize.width > 600 ? 18 : 16;
