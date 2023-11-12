@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:d_allegro/screens/product_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:d_allegro/http_client.dart';
@@ -71,6 +72,9 @@ class _AdditemState extends State<Additem> {
               backgroundColor: Colors.green,
             ),
           );
+          var id = response["id"];
+          Navigator.pushNamed(context, '/item',
+              arguments: ProductPageArguments(id));
         }
       } catch (e) {
         if (context.mounted) {
@@ -86,18 +90,17 @@ class _AdditemState extends State<Additem> {
   }
 
   Future<Map<String, dynamic>> addItem() async {
-    final response = await dio.post(
-      '$apiURL/add_item',
-      data: FormData.fromMap({
-        'name': _nameController.text,
-        'price': _priceController.text,
-        'quantity': _quantityController.text,
-        'description': _descriptionController.text,
-        'category': _category,
-        'photo':
-            _image != null ? await MultipartFile.fromFile(_image!.path) : null,
-      }),
-    );
+    var formData = FormData.fromMap({
+      'name': _nameController.text,
+      'price': _priceController.text,
+      'quantity': _quantityController.text,
+      'description': _descriptionController.text,
+      'category': _category,
+      //'photo': 'photo',
+      'photo':
+          _image != null ? await MultipartFile.fromFile(_image!.path) : null,
+    });
+    final response = await dio.post('$apiURL/add_item', data: formData);
 
     if (response.statusCode == 200) {
       return response.data;

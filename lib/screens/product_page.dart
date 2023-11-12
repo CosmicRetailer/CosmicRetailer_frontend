@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:d_allegro/http_client.dart';
 
-class DescriptionPage extends StatefulWidget {
-  final String itemID;
+class ProductPageArguments {
+  final String id;
 
-  const DescriptionPage({super.key, required this.itemID});
+  ProductPageArguments(this.id);
+}
+
+class DescriptionPage extends StatefulWidget {
+  final ProductPageArguments arguments;
+
+  const DescriptionPage({super.key, required this.arguments});
 
   @override
   State<DescriptionPage> createState() => _DescriptionPageState();
@@ -12,20 +18,57 @@ class DescriptionPage extends StatefulWidget {
 
 class _DescriptionPageState extends State<DescriptionPage> {
   late Future<Map<String, dynamic>> itemDetails;
-
+  bool isFavorite = false;
   @override
   void initState() {
     super.initState();
-    itemDetails = fetchItemDetails(widget.itemID);
+    itemDetails = fetchItemDetails(widget.arguments.id);
   }
 
   Future<Map<String, dynamic>> fetchItemDetails(String itemID) async {
     final response = await dio.get('$apiURL/get_item/$itemID');
 
     if (response.statusCode == 200) {
+      setState(() {
+        isFavorite = response.data?['isFavorite'];
+      });
       return response.data;
     } else {
       throw Exception('Failed to load item details');
+    }
+  }
+
+  void _deleteItem() async {
+    var itemID = widget.arguments.id;
+    final response = await dio.delete('$apiURL/delete_item/$itemID');
+
+    if (response.statusCode == 200 && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Deleted item', textAlign: TextAlign.center),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pop(context);
+    } else if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to deleted item', textAlign: TextAlign.center),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
+
+  void _toggleFavorite() async {
+    var itemID = widget.arguments.id;
+    final response = await dio.put('$apiURL/toggle_favorite/$itemID');
+    if (response.statusCode == 200) {
+      setState(() {
+        isFavorite = !isFavorite; // Update favorite status
+      });
+    } else {
+      throw Exception('Failed to update favorite status');
     }
   }
 
@@ -34,7 +77,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
     Size screenSize = MediaQuery.of(context).size;
     double widthFactor = screenSize.width > 600 ? 0.4 : 0.5;
 
-    double padding = screenSize.width > 600 ? 24 : 16;
+    double padding = screenSize.width > 600 ? 20 : 12;
 
     double titleSize = screenSize.width > 600 ? 24 : 20;
     double priceSize = screenSize.width > 600 ? 28 : 24;
@@ -57,29 +100,48 @@ class _DescriptionPageState extends State<DescriptionPage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             var item = snapshot.data?['item'];
+            var isOwner = snapshot.data?['isOwner'];
             return SingleChildScrollView(
               padding: EdgeInsets.all(padding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Wrap(
-                    alignment: WrapAlignment.spaceAround,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: padding, // space between the children
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.network(
-                        item['photo'],
+                        item['photoUrl'] ?? 'https://picsum.photos/200',
                         width: screenSize.width * widthFactor,
                         fit: BoxFit.cover,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            item['name'],
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: titleSize),
+                          Row(
+                            children: [
+                              Text(
+                                item['name'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: titleSize,
+                                ),
+                              ),
+                              isOwner == true
+                                  ? IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                      ),
+                                      onPressed: _deleteItem)
+                                  : IconButton(
+                                      icon: Icon(
+                                        isFavorite
+                                            ? Icons.favorite
+                                            : Icons.favorite_border,
+                                        color: isFavorite ? Colors.red : null,
+                                      ),
+                                      onPressed: _toggleFavorite),
+                            ],
                           ),
                           SizedBox(height: padding / 2),
                           Text(
@@ -98,6 +160,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                           ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
+                                minimumSize: Size(screenSize.width * 0.3, 50),
                                 backgroundColor: Colors.black),
                             child: const Text('BUY NOW'),
                           ),
