@@ -1,4 +1,5 @@
 import 'package:d_allegro/screens/main_screen.dart';
+import 'package:d_allegro/screens/product_page.dart';
 import 'package:d_allegro/screens/scaffold.dart';
 import 'package:d_allegro/screens/settings.dart';
 import 'package:d_allegro/screens/sign_in.dart';
@@ -77,6 +78,9 @@ class CosmicRetailerApp extends StatelessWidget {
             ),
         '/main': (context) => const CosmicRetailerScaffold(),
         '/settings': (context) => const SettingsPage(),
+        '/item': (context) => DescriptionPage(
+            arguments: ModalRoute.of(context)!.settings.arguments
+                as ProductPageArguments),
       },
       theme: ThemeData(
         useMaterial3: true,

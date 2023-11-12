@@ -52,52 +52,54 @@ class _UserProfilePageState extends State<UserProfilePage> {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: screenSize.height * 0.05),
-            CircleAvatar(
-              radius: screenSize.width * 0.15,
-              backgroundImage: NetworkImage(userProfilePicUrl),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              userName,
-              style: TextStyle(
-                fontSize: screenSize.width * 0.05,
-                fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: screenSize.height * 0.05),
+              CircleAvatar(
+                radius: screenSize.width * 0.15,
+                backgroundImage: NetworkImage(userProfilePicUrl),
               ),
-            ),
-            ToggleButtons(
-              direction: Axis.horizontal,
-              onPressed: (int index) {
-                setState(() {
-                  for (int i = 0; i < _selectedButton.length; i++) {
-                    _selectedButton[i] = i == index;
-                  }
-                });
-              },
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              selectedBorderColor: Colors.green[700],
-              selectedColor: Colors.white,
-              fillColor: Colors.green[200],
-              color: Colors.green[400],
-              constraints: BoxConstraints(
-                minHeight: (screenSize.width * 0.10),
-                minWidth: (screenSize.width * 0.40),
-              ),
-              isSelected: _selectedButton,
-              children: [
-                Text(
-                  'My offers',
-                  style: TextStyle(fontSize: screenSize.width * 0.04),
+              const SizedBox(height: 8),
+              Text(
+                userName,
+                style: TextStyle(
+                  fontSize: screenSize.width * 0.05,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text('History',
-                    style: TextStyle(fontSize: screenSize.width * 0.04))
-              ],
-            ),
-          ],
+              ),
+              ToggleButtons(
+                direction: Axis.horizontal,
+                onPressed: (int index) {
+                  setState(() {
+                    for (int i = 0; i < _selectedButton.length; i++) {
+                      _selectedButton[i] = i == index;
+                    }
+                  });
+                },
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                selectedBorderColor: Colors.green[700],
+                selectedColor: Colors.white,
+                fillColor: Colors.green[200],
+                color: Colors.green[400],
+                constraints: BoxConstraints(
+                  minHeight: (screenSize.width * 0.10),
+                  minWidth: (screenSize.width * 0.40),
+                ),
+                isSelected: _selectedButton,
+                children: [
+                  Text(
+                    'My offers',
+                    style: TextStyle(fontSize: screenSize.width * 0.04),
+                  ),
+                  Text('History',
+                      style: TextStyle(fontSize: screenSize.width * 0.04))
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
