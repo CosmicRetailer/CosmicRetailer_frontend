@@ -114,6 +114,11 @@ class _DescriptionPageState extends State<DescriptionPage> {
                         item['photoUrl'] ?? 'https://picsum.photos/200',
                         width: screenSize.width * widthFactor,
                         fit: BoxFit.cover,
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
+                          return const Icon(Icons.image_not_supported,
+                              size: 100.0);
+                        },
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
