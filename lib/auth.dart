@@ -4,8 +4,10 @@ import 'package:flutter/widgets.dart';
 class CosmicRetailerAuth extends ChangeNotifier {
   bool _signedIn = false;
   String _token = '';
+  String _userID = '6543e334aec4e2a2cb332173';
   bool get signedIn => _signedIn;
   String get token => _token;
+  String get userID => _userID;
 
   Future<void> signOut() async {
     await Future<void>.delayed(const Duration(milliseconds: 200));

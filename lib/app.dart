@@ -77,7 +77,7 @@ class CosmicRetailerApp extends StatelessWidget {
               },
             ),
         '/main': (context) => const CosmicRetailerScaffold(),
-        '/settings': (context) => const SettingsPage(),
+        '/settings': (context) => SettingsPage(id: authState.userID),
         '/item': (context) => DescriptionPage(
             arguments: ModalRoute.of(context)!.settings.arguments
                 as ProductPageArguments),
