@@ -129,19 +129,27 @@ class _ItemListPageState extends State<ItemListPage> {
                       itemCount: filteredItems.length,
                       itemBuilder: (context, index) {
                         final item = filteredItems[index];
-                        final imageUrl = item['photo'];
+                        final imageUrl = item['photoUrl'];
                         final title = item['name'];
                         final price = item['price'] != null
                             ? double.parse(item['price'].toString())
                             : 0.0;
+
                         return Column(
                           children: [
-                            Image.network(
-                              imageUrl,
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
+                            imageUrl != null
+                                ? Image.network(
+                                    imageUrl,
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'assets/splash.png', // Ścieżka do domyślnego obrazka w aplikacji
+                                    height: 200,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
                             Text(
                               title,
                               style: const TextStyle(fontSize: 20),
