@@ -100,7 +100,12 @@ class _DescriptionPageState extends State<DescriptionPage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             var item = snapshot.data?['item'];
+            var user = snapshot.data?['user'];
             var isOwner = snapshot.data?['isOwner'];
+            var nameToDisplay =
+                user['fullName'] == null || user['fullName'] == ''
+                    ? user['nickname']
+                    : user['fullName'];
             return SingleChildScrollView(
               padding: EdgeInsets.all(padding),
               child: Column(
@@ -149,6 +154,11 @@ class _DescriptionPageState extends State<DescriptionPage> {
                             ],
                           ),
                           SizedBox(height: padding / 2),
+                          Text(
+                            'Owner: $nameToDisplay',
+                            style: TextStyle(
+                                fontSize: descriptionSize, color: Colors.grey),
+                          ),
                           Text(
                             'Quantity: ${item['quantity']}',
                             style: TextStyle(
