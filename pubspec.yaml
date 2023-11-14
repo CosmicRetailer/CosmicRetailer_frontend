@@ -41,6 +41,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0  # Wybierz odpowiednią wersję
   cupertino_icons: ^1.0.2
   image_picker: ^1.0.4
+  web3modal_flutter: ^3.0.0-beta04
 
 dev_dependencies:
   flutter_test:
