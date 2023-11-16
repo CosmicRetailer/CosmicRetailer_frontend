@@ -85,6 +85,28 @@ class CosmicRetailerApp extends StatelessWidget {
                 }
               },
             ),
+          '/createWallet': (context) => CreateWalletScreen(
+              onCreateWallet: (credentials) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Create Wallet'),
+                      content: const Text('Wallet created successfully.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.pushReplacementNamed(context, '/main');
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
         '/main': (context) => const CosmicRetailerScaffold(),
         '/settings': (context) => SettingsPage(id: authState.userID),
         '/item': (context) => DescriptionPage(
