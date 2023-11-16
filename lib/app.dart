@@ -1,3 +1,4 @@
+import 'package:d_allegro/screens/create_wallet_screen.dart';
 import 'package:d_allegro/screens/main_screen.dart';
 import 'package:d_allegro/screens/product_page.dart';
 import 'package:d_allegro/screens/scaffold.dart';
@@ -62,6 +63,28 @@ class CosmicRetailerApp extends StatelessWidget {
                     return AlertDialog(
                       title: const Text('Rejestracja'),
                       content: const Text('Pomyślna rejestracja.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.pushReplacementNamed(context, '/createWallet');
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+        '/createWallet': (context) => CreateWalletScreen(
+              onCreateWallet: (credentials) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Create Wallet'),
+                      content: const Text('Wallet created successfully.'),
                       actions: [
                         TextButton(
                           onPressed: () {
