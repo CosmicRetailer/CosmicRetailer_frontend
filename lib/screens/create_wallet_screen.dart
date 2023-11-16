@@ -8,12 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/web3dart.dart';
 
 class CreateWalletScreen extends StatefulWidget {
-  const CreateWalletScreen({Key? key, required Null Function(dynamic credentials) onCreateWallet}) : super(key: key);
+  final ValueChanged<void> onCreateWallet;
+  const CreateWalletScreen({Key? key, required this.onCreateWallet}) : super(key: key);
 
   @override
   _CreateWalletScreenState createState() => _CreateWalletScreenState();
-  
-  void onCreateWallet(param0) {}
 }
 
 class _CreateWalletScreenState extends State<CreateWalletScreen> {
