@@ -56,47 +56,33 @@ class CosmicRetailerApp extends StatelessWidget {
               },
             ),
         '/signup': (context) => SignUpScreen(
-              onSignUp: (credentials) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Rejestracja'),
-                      content: const Text('Pomyślna rejestracja.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            Navigator.pushReplacementNamed(context, '/createWallet');
-                          },
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    );
-                  },
+              onSignUp: (credentials) async {
+                var signedUp = await authState.signUp(
+                  credentials.nickname,
+                  credentials.email,
+                  credentials.password,
+                  credentials.token,
                 );
-              },
-            ),
-        '/createWallet': (context) => CreateWalletScreen(
-              onCreateWallet: (credentials) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Create Wallet'),
-                      content: const Text('Wallet created successfully.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            Navigator.pushReplacementNamed(context, '/main');
-                          },
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    );
-                  },
-                );
+                if (signedUp && context.mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Register successful'),
+                        content: const Text('You have been registered!'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.pushReplacementNamed(context, '/main');
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
               },
             ),
         '/main': (context) => const CosmicRetailerScaffold(),

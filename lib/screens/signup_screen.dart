@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -6,8 +8,9 @@ class Credentials {
   final String nickname;
   final String email;
   final String password;
+  final String token;
 
-  Credentials(this.nickname, this.email, this.password);
+  Credentials(this.nickname, this.email, this.password, this.token);
 }
 
 class SignUpScreen extends StatefulWidget {
@@ -106,17 +109,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
       String nickname, String email, String password) async {
     final response = await http.post(
       Uri.parse('$apiURL/register'),
-      body: {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
         'email': email,
         'nickname': nickname,
         'password': password,
-      },
+      }),
     );
 
     if (response.statusCode == 200) {
-      final credentials = Credentials(nickname, email, password);
+      print('User registered successfully');
+      final responseBody = json.decode(response.body);
+      final token = responseBody['access_token'];
+      final credentials = Credentials(nickname, email, password, token);
       widget.onSignUp(credentials);
     } else {
+      print('Error during registration: ${response.statusCode}');
       if (context.mounted) {
         showRegisterErrorDialog(context);
       }
