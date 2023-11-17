@@ -25,6 +25,14 @@ class CosmicRetailerAuth extends ChangeNotifier {
     return _signedIn;
   }
 
+  Future<bool> signUp(String nickname, String email, String password, String tokenac) async {
+    await Future<void>.delayed(const Duration(milliseconds: 200));
+    _token = tokenac;
+    _signedIn = true;
+    notifyListeners();
+    return _signedIn;
+  }
+
   @override
   bool operator ==(Object other) =>
       other is CosmicRetailerAuth && other._signedIn == _signedIn;
