@@ -47,6 +47,7 @@ class CosmicRetailerApp extends StatelessWidget {
                   credentials.username,
                   credentials.password,
                   credentials.token,
+                  credentials.userId,
                 );
                 if (signedIn && context.mounted) {
                   Navigator.of(context).pop();
