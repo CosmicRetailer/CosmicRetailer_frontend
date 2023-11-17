@@ -74,7 +74,7 @@ class CosmicRetailerApp extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              Navigator.pushReplacementNamed(context, '/main');
+                              Navigator.pushReplacementNamed(context, '/createWallet');
                             },
                             child: const Text('OK'),
                           ),
@@ -86,6 +86,7 @@ class CosmicRetailerApp extends StatelessWidget {
               },
             ),
           '/createWallet': (context) => CreateWalletScreen(
+              nickname: authState.username,
               onCreateWallet: (credentials) {
                 showDialog(
                   context: context,

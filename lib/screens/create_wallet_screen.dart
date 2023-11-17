@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,34 +11,18 @@ import 'package:web3dart/web3dart.dart';
 
 class CreateWalletScreen extends StatefulWidget {
   final ValueChanged<void> onCreateWallet;
-  const CreateWalletScreen({Key? key, required this.onCreateWallet}) : super(key: key);
+  final String nickname;
+  const CreateWalletScreen({Key? key, required this.onCreateWallet, required this.nickname}) : super(key: key);
 
   @override
-  _CreateWalletScreenState createState() => _CreateWalletScreenState();
+  _CreateWalletScreenState createState() => _CreateWalletScreenState(nickname);
 }
 
 class _CreateWalletScreenState extends State<CreateWalletScreen> {
   String walletAddress = '';
-
-  @override
-  void initState() {
-    super.initState();
-    loadWalletAddress();
-  }
-
-  Future<void> loadWalletAddress() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? privateKey = prefs.getString('privateKey');
-    if (privateKey != null) {
-      final walletProvider = WalletProvider();
-      await walletProvider.loadPrivateKey();
-      EthereumAddress address = await walletProvider.getPublicKey(privateKey);
-      
-      setState(() {
-        walletAddress = address.hex;
-      });
-    }
-  }
+  String nickname = '';
+  
+  _CreateWalletScreenState(this.nickname);
 
   Future<void> showWalletErrorDialog(BuildContext context) {
     return showDialog(
@@ -74,20 +60,34 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
         ),
       );
 
-      final response = await http.post(
-        Uri.parse('$apiURL/set_wallet_address'),
-        body: {
-          'wallet_address': mnemonic,
-        },
-      );
+      walletProvider.getPrivateKey(mnemonic).then((privateKey) async {
+        EthereumAddress address = await walletProvider.getPublicKey(privateKey);
+        setState(() {
+          walletAddress = address.hex;
+        });
 
-      if (response.statusCode != 200) {
-        widget.onCreateWallet(null);
-      } else {
-        if (context.mounted) {
-          showWalletErrorDialog(context);
+        print('Wallet address: $walletAddress');
+        print('Nickname: $nickname');
+        print('Mnemonic: $mnemonic');
+        final response = await http.post(
+          Uri.parse('$apiURL/set_wallet_address'),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'nickname': nickname,
+            'walletAddress': walletAddress,
+          }),
+        );
+
+        if (response.statusCode == 200) {
+          widget.onCreateWallet(null);
+        } else {
+          if (context.mounted) {
+            showWalletErrorDialog(context);
+          }
         }
-      }
+      });
     }
 
     return Scaffold(
@@ -129,7 +129,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
               label: const Text('Copy to clipboard'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
-                textStyle: const TextStyle(fontSize: 20.0),
+                textStyle: const TextStyle(fontSize: 21.0),
                 elevation: 4,
               ),
             ),
