@@ -47,5 +47,12 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+
+
+		<key>NSCameraUsageDescription</key>
+		<string>Camera usage description</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>We need access to your photo library to upload images and customize your profile.</string>
+
 	</dict>
 </plist>
