@@ -72,6 +72,38 @@ class _DescriptionPageState extends State<DescriptionPage> {
     }
   }
 
+  void _buyItem() async {
+    var itemID = widget.arguments.id;
+    final response = await dio.put('$apiURL/buy_item/$itemID');
+
+    if (response.statusCode == 200 && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bought item', textAlign: TextAlign.center),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pushReplacementNamed(context, '/main');
+    } else if (context.mounted) {
+      if (response.statusCode == 400) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Not enough money', textAlign: TextAlign.center),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to buy item', textAlign: TextAlign.center),
+            backgroundColor: Colors.red,
+          ),
+        );
+        Navigator.pushReplacementNamed(context, '/main');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
@@ -173,7 +205,9 @@ class _DescriptionPageState extends State<DescriptionPage> {
                           ),
                           SizedBox(height: padding),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _buyItem();
+                            },
                             style: ElevatedButton.styleFrom(
                                 minimumSize: Size(screenSize.width * 0.3, 50),
                                 backgroundColor: Colors.black),

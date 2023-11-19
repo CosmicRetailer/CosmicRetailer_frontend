@@ -39,6 +39,12 @@ class _ImportWalletState extends State<ImportWallet> {
   }
 
   void navigateToSettings() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Wallet has been imported'),
+        backgroundColor: Colors.green,
+      ),
+    );
     Navigator.pushReplacementNamed(context, '/settings');
   }
 
