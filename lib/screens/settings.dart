@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:d_allegro/http_client.dart';
+import 'package:d_allegro/screens/import_wallet.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -24,6 +26,7 @@ class _SettingsState extends State<SettingsPage> {
   late final TextEditingController _addressController;
   late String imgUrl = '';
   late String _selectedCountry = 'Country 1';
+  late String _walletAddress = '';
 
   final List<String> _countries = ['Country 1', 'Country 2', 'Country 3'];
   File? _image;
@@ -47,6 +50,7 @@ class _SettingsState extends State<SettingsPage> {
       _addressController = TextEditingController(text: user['address']);
       imgUrl = user['photoUrl'] ?? '';
       _selectedCountry = user['Country'] ?? 'Country 1';
+      _walletAddress = user['walletAddress'] ?? '';
       return response.data;
     } else {
       throw Exception('Failed to load user details');
@@ -123,6 +127,12 @@ class _SettingsState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         backgroundColor: Colors.white,
         title: const Text('Settings',
             style: TextStyle(color: Colors.black, fontSize: 24)),
@@ -192,6 +202,53 @@ class _SettingsState extends State<SettingsPage> {
                       decoration: const InputDecoration(labelText: 'Address'),
                     ),
                     const SizedBox(height: 16),
+                    const Text(
+                      'Wallet Address',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          _walletAddress,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            Clipboard.setData(
+                              ClipboardData(text: _walletAddress),
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Copied to clipboard!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.copy),
+                        ),
+                      ],
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ImportWallet(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Change Wallet from Seed',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Profile Photo',
+                      style: TextStyle(fontSize: 20),
+                    ),
                     _image == null && imgUrl == ''
                         ? TextButton.icon(
                             onPressed: _pickImage,
@@ -201,7 +258,12 @@ class _SettingsState extends State<SettingsPage> {
                         : _buildImagePicker(),
                     ElevatedButton(
                       onPressed: _submitSettings,
-                      child: const Text('Save Settings'),
+                      child: const Text(
+                        'Save Settings',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -1,6 +1,7 @@
 import 'package:d_allegro/auth.dart';
 import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({Key? key}) : super(key: key);
@@ -56,8 +57,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 actions: <Widget>[
                   IconButton(
                     icon: const Icon(Icons.logout, color: Colors.white),
-                    onPressed: () {
-                      // Handle logout tap
+                    onPressed: () async {
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      prefs.remove('privateKey');
+                      // TODO: Handle logout tap
                     },
                   ),
                 ],
