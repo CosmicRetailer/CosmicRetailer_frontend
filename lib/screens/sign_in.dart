@@ -2,12 +2,14 @@ import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class Credentials {
   final String username;
   final String password;
   final String token;
-  Credentials(this.username, this.password, this.token);
+  final String userId;
+  Credentials(this.username, this.password, this.token, this.userId);
 }
 
 class SignInScreen extends StatefulWidget {
@@ -136,7 +138,10 @@ class _SignInScreenState extends State<SignInScreen> {
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
       final token = responseBody['access_token'];
-      final credentials = Credentials(username, password, token);
+      final Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      final String userId = decodedToken['user_id'];
+      print('User ID: $userId');
+      final credentials = Credentials(username, password, token, userId);
       widget.onSignIn(credentials);
     } else {
       if (context.mounted) {
