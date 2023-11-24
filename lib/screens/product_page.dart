@@ -1,5 +1,7 @@
+import 'package:d_allegro/screens/rate_user.dart';
 import 'package:flutter/material.dart';
 import 'package:d_allegro/http_client.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductPageArguments {
   final String id;
@@ -129,7 +131,8 @@ class _DescriptionPageState extends State<DescriptionPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return const Center(
+                child: Text('Error: Unable to load item details'));
           } else {
             var item = snapshot.data?['item'];
             var user = snapshot.data?['user'];
@@ -186,6 +189,24 @@ class _DescriptionPageState extends State<DescriptionPage> {
                             ],
                           ),
                           SizedBox(height: padding / 2),
+                          InkWell(
+                            child: RatingBarIndicator(
+                              rating: user['avgRating'] ?? 0,
+                              itemSize: 10,
+                              direction: Axis.horizontal,
+                              itemCount: 5,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 1.0),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pushNamed(context, '/rate',
+                                  arguments: RateUserPageArguments(user['id']));
+                            },
+                          ),
                           Text(
                             'Owner: $nameToDisplay',
                             style: TextStyle(
