@@ -18,7 +18,7 @@ class _CosmicRetailerScaffoldeState extends State<CosmicRetailerScaffold> {
   final List<Widget> _widgetOptions = [
     const ItemListPage(),
     DescriptionPage(
-        arguments: ProductPageArguments('654ffeb1752af194274baa93')),
+        arguments: ProductPageArguments('655fa0a96482b6955f4c8bda')),
     const Additem(),
     const UserProfilePage(),
   ];
