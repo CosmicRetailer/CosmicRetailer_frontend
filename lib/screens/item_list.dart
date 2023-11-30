@@ -1,8 +1,9 @@
-import 'package:d_allegro/http_client.dart';
 import 'package:flutter/material.dart';
+import 'package:d_allegro/http_client.dart';
+import 'product_page.dart'; // Import DescriptionPage
 
 class ItemListPage extends StatefulWidget {
-  const ItemListPage({super.key});
+  const ItemListPage({Key? key});
 
   @override
   _ItemListPageState createState() => _ItemListPageState();
@@ -15,12 +16,12 @@ class _ItemListPageState extends State<ItemListPage> {
   @override
   void initState() {
     super.initState();
-    // Inicjalizacja Future bez pobierania danych, bo chcemy to zrobić po naciśnięciu przycisku Search
-    items = Future.value(null);
+    // Na starcie używamy all_items
+    items = fetchAllItems();
   }
 
-  Future<List<dynamic>?> fetchItems(String searchQuery) async {
-    final response = await dio.get('$apiURL/all_items?q=$searchQuery');
+  Future<List<dynamic>?> fetchAllItems() async {
+    final response = await dio.get('$apiURL/all_items');
 
     if (response.statusCode == 200) {
       return response.data['items'];
@@ -29,16 +30,14 @@ class _ItemListPageState extends State<ItemListPage> {
     }
   }
 
-  List<dynamic>? filterItemsWithNames(
-      List<dynamic>? items, String searchQuery) {
-    return items
-        ?.where((item) =>
-            item['name'] != null &&
-            item['name']
-                .toString()
-                .toLowerCase()
-                .contains(searchQuery.toLowerCase()))
-        .toList();
+  Future<List<dynamic>?> fetchItems(String searchQuery) async {
+    final response = await dio.get('$apiURL/find/$searchQuery');
+
+    if (response.statusCode == 200) {
+      return response.data['items'];
+    } else {
+      throw Exception('Failed to load items');
+    }
   }
 
   @override
@@ -51,12 +50,15 @@ class _ItemListPageState extends State<ItemListPage> {
             padding: const EdgeInsets.all(8.0),
             child: TextButton(
               onPressed: () async {
-                // Implement search functionality
-                // Pobierz dane dopiero po naciśnięciu przycisku Search
                 final searchQuery = searchController.text;
-                final fetchedItems = await fetchItems(searchQuery);
                 setState(() {
-                  items = Future.value(fetchedItems);
+                  // Jeśli searchQuery jest puste, używamy all_items
+                  if (searchQuery.isEmpty) {
+                    items = fetchAllItems();
+                  } else {
+                    // W przeciwnym razie używamy find
+                    items = fetchItems(searchQuery);
+                  }
                 });
               },
               child: Text(
@@ -73,12 +75,8 @@ class _ItemListPageState extends State<ItemListPage> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                // Left side Filter
                 TextButton(
                   onPressed: () {
-                    // Implement filter functionality
-                    // Możesz dodać kod obsługujący filtrowanie
-                    // na przykład otwierając okno dialogowe z opcjami filtrowania.
                     print('Filter pressed');
                   },
                   child: Row(
@@ -92,8 +90,7 @@ class _ItemListPageState extends State<ItemListPage> {
                     ],
                   ),
                 ),
-                Spacer(), // Spacer to push Search to the right
-                // Right side Search
+                Spacer(),
               ],
             ),
           ),
@@ -102,9 +99,7 @@ class _ItemListPageState extends State<ItemListPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: TextField(
                 controller: searchController,
-                onChanged: (value) {
-                  // Nie potrzebujemy setState w tej funkcji
-                },
+                onChanged: (value) {},
                 decoration: const InputDecoration(
                   labelText: 'Szukaj przedmiotu...',
                   prefixIcon: Icon(Icons.search),
@@ -121,8 +116,7 @@ class _ItemListPageState extends State<ItemListPage> {
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else if (snapshot.hasData) {
-                  final filteredItems = filterItemsWithNames(
-                      snapshot.data, searchController.text);
+                  final filteredItems = snapshot.data;
 
                   if (filteredItems != null && filteredItems.isNotEmpty) {
                     return ListView.builder(
@@ -134,33 +128,46 @@ class _ItemListPageState extends State<ItemListPage> {
                             ? double.parse(item['price'].toString())
                             : 0.0;
 
-                        return Column(
-                          children: [
-                            Image.network(
-                              item['photoUrl'] ?? 'https://picsum.photos/200',
-                              height: 200,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                            Text(
-                              title,
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                            Text(
-                              'Price: \$${price.toStringAsFixed(2)}',
-                              style: const TextStyle(fontSize: 20),
-                            ),
-                          ],
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DescriptionPage(
+                                  arguments: ProductPageArguments(
+                                    item[
+                                        '_id'], // Assuming id is the unique identifier of the item
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              Image.network(
+                                item['photoUrl'] ?? 'https://picsum.photos/200',
+                                height: 200,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                              Text(
+                                title,
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              Text(
+                                'Price: \$${price.toStringAsFixed(2)}',
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ],
+                          ),
                         );
                       },
                     );
                   } else {
-                    return const Center(
-                        child: Text('Brak przedmiotów o podanej nazwie.'));
+                    return const Center(child: Text('No items found.'));
                   }
                 } else {
-                  return const Center(
-                      child: Text('Brak dostępnych przedmiotów.'));
+                  return const Center(child: Text('No items available.'));
                 }
               },
             ),
@@ -168,5 +175,11 @@ class _ItemListPageState extends State<ItemListPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 }

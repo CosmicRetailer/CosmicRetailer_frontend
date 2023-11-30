@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:d_allegro/screens/rate_user.dart';
 import 'package:flutter/material.dart';
 import 'package:d_allegro/http_client.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductPageArguments {
   final String id;
@@ -75,8 +77,17 @@ class _DescriptionPageState extends State<DescriptionPage> {
   }
 
   void _buyItem() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     var itemID = widget.arguments.id;
-    final response = await dio.put('$apiURL/buy_item/$itemID');
+    final response = await dio.post('$apiURL/buy_item/$itemID',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        ),
+        data: {
+          'privateKey': prefs.getString('privateKey'),
+        });
 
     if (response.statusCode == 200 && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
