@@ -1,9 +1,9 @@
 import 'package:adaptive_navigation/adaptive_navigation.dart';
 import 'package:d_allegro/screens/add_item.dart';
 import 'package:d_allegro/screens/item_list.dart';
-import 'package:d_allegro/screens/product_page.dart';
 import 'package:d_allegro/screens/profile.dart';
 import 'package:flutter/material.dart';
+import 'package:d_allegro/screens/favorite_item.dart';
 
 class CosmicRetailerScaffold extends StatefulWidget {
   const CosmicRetailerScaffold({
@@ -17,8 +17,7 @@ class CosmicRetailerScaffold extends StatefulWidget {
 class _CosmicRetailerScaffoldeState extends State<CosmicRetailerScaffold> {
   final List<Widget> _widgetOptions = [
     const ItemListPage(),
-    DescriptionPage(
-        arguments: ProductPageArguments('655fa0a96482b6955f4c8bda')),
+    const FavoriteItemsPage(),
     const Additem(),
     const UserProfilePage(),
   ];
