@@ -28,6 +28,14 @@ class _FavoriteItemsPageState extends State<FavoriteItemsPage> {
     }
   }
 
+  // Metoda do odświeżania listy ulubionych
+  Future<void> refreshFavoriteItems() async {
+    final refreshedItems = await fetchFavoriteItems();
+    setState(() {
+      favoriteItems = Future.value(refreshedItems);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,18 +63,19 @@ class _FavoriteItemsPageState extends State<FavoriteItemsPage> {
                       : 0.0;
 
                   return InkWell(
-                    onTap: () {
-                      Navigator.push(
+                    onTap: () async {
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => DescriptionPage(
                             arguments: ProductPageArguments(
-                              item[
-                                  '_id'], // Assuming id is the unique identifier of the item
+                              item['_id'],
                             ),
                           ),
                         ),
                       );
+
+                      refreshFavoriteItems();
                     },
                     child: Column(
                       children: [
