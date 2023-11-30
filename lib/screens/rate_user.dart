@@ -189,16 +189,16 @@ class _RateUserPageState extends State<RateUserPage> {
       itemCount: ratings.length,
       itemBuilder: (context, index) {
         var rating = ratings[index];
-        var fullStars = rating['stars'].floor();
-        var halfStar = rating['stars'] - fullStars >= 0.5 ? 1 : 0;
+        var fullStars = rating['rating'].floor();
+        var halfStar = rating['rating'] - fullStars >= 0.5 ? 1 : 0;
         var emptyStars = 5 - fullStars - halfStar;
 
         return ListTile(
           leading: CircleAvatar(
             // Displaying initials if no image is available
-            child: Text(rating['posterName'][0]),
+            child: Text(rating['user'][0]),
           ),
-          title: Text(rating['posterName']),
+          title: Text(rating['user']),
           subtitle: Text(rating['comment']),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
