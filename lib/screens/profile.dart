@@ -58,7 +58,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   IconButton(
                     icon: const Icon(Icons.logout, color: Colors.white),
                     onPressed: () async {
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
                       prefs.remove('privateKey');
                       // TODO: Handle logout tap
                     },
@@ -72,14 +73,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     children: <Widget>[
                       SizedBox(height: screenSize.height * 0.05),
                       CircleAvatar(
-                        radius: screenSize.width * 0.15,
+                        radius:
+                            (screenSize.width + screenSize.height) / 2 * 0.04 +
+                                30,
                         backgroundImage: NetworkImage(userProfilePicUrl),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         userName,
                         style: TextStyle(
-                          fontSize: screenSize.width * 0.05,
+                          fontSize:
+                              (screenSize.width + screenSize.height) / 2 * 0.05,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -99,18 +103,19 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         fillColor: Colors.green[200],
                         color: Colors.green[400],
                         constraints: BoxConstraints(
-                          minHeight: (screenSize.width * 0.10),
-                          minWidth: (screenSize.width * 0.40),
-                        ),
+                            minHeight: (screenSize.width * 0.05) + 30,
+                            minWidth: (screenSize.width * 0.20 + 60),
+                            maxWidth: (screenSize.width * 0.40)),
                         isSelected: _selectedButton,
                         children: [
                           Text(
                             'My offers',
-                            style: TextStyle(fontSize: screenSize.width * 0.04),
+                            style: TextStyle(
+                                fontSize: screenSize.width * 0.04 + 4),
                           ),
                           Text('History',
-                              style:
-                                  TextStyle(fontSize: screenSize.width * 0.04))
+                              style: TextStyle(
+                                  fontSize: screenSize.width * 0.04 + 4))
                         ],
                       ),
                     ],
