@@ -85,7 +85,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
           },
         ),
         data: {
-          'privateKey': prefs.getString('privateKey');,
+          'privateKey': prefs.getString('privateKey'),
         }
     );
 
