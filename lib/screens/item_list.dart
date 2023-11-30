@@ -16,7 +16,18 @@ class _ItemListPageState extends State<ItemListPage> {
   @override
   void initState() {
     super.initState();
-    items = Future.value(null);
+    // Na starcie używamy all_items
+    items = fetchAllItems();
+  }
+
+  Future<List<dynamic>?> fetchAllItems() async {
+    final response = await dio.get('$apiURL/all_items');
+
+    if (response.statusCode == 200) {
+      return response.data['items'];
+    } else {
+      throw Exception('Failed to load items');
+    }
   }
 
   Future<List<dynamic>?> fetchItems(String searchQuery) async {
@@ -40,9 +51,14 @@ class _ItemListPageState extends State<ItemListPage> {
             child: TextButton(
               onPressed: () async {
                 final searchQuery = searchController.text;
-                final fetchedItems = await fetchItems(searchQuery);
                 setState(() {
-                  items = Future.value(fetchedItems);
+                  // Jeśli searchQuery jest puste, używamy all_items
+                  if (searchQuery.isEmpty) {
+                    items = fetchAllItems();
+                  } else {
+                    // W przeciwnym razie używamy find
+                    items = fetchItems(searchQuery);
+                  }
                 });
               },
               child: Text(
