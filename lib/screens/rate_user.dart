@@ -37,20 +37,23 @@ class _RateUserPageState extends State<RateUserPage> {
       'rating': rating,
     });
 
-    if (response.statusCode == 200 && response.data['code'] == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Added review', textAlign: TextAlign.center),
-          backgroundColor: Colors.green,
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to add review', textAlign: TextAlign.center),
-          backgroundColor: Colors.red,
-        ),
-      );
+    if (context.mounted) {
+      if (response.statusCode == 200 && response.data['code'] == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Added review', textAlign: TextAlign.center),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Failed to add review', textAlign: TextAlign.center),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -63,14 +66,7 @@ class _RateUserPageState extends State<RateUserPage> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    double widthFactor = screenSize.width > 600 ? 0.4 : 0.5;
-
-    double padding = screenSize.width > 600 ? 20 : 12;
-
     double titleSize = screenSize.width > 600 ? 24 : 20;
-    double priceSize = screenSize.width > 600 ? 28 : 24;
-    double descriptionSize = screenSize.width > 600 ? 18 : 16;
-    final authState = CosmicRetailerAuthScope.of(context);
     return FutureBuilder(
       future: fetchUserDetails(widget.arguments.id),
       builder: (context, snapshot) {
@@ -194,6 +190,10 @@ class _RateUserPageState extends State<RateUserPage> {
       itemCount: ratings.length,
       itemBuilder: (context, index) {
         var rating = ratings[index];
+        var fullStars = rating['rating'].floor();
+        var halfStar = rating['rating'] - fullStars >= 0.5 ? 1 : 0;
+        var emptyStars = 5 - fullStars - halfStar;
+
         return ListTile(
           leading: CircleAvatar(
             // Displaying initials if no image is available
@@ -203,12 +203,14 @@ class _RateUserPageState extends State<RateUserPage> {
           subtitle: Text(rating['comment']),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
-            children: List.generate(5, (starIndex) {
-              return Icon(
-                starIndex < rating['rating'] ? Icons.star : Icons.star_border,
-                color: Colors.amber,
-              );
-            }),
+            children: [
+              ...List.generate(fullStars,
+                  (_) => const Icon(Icons.star, color: Colors.amber)),
+              if (halfStar == 1)
+                const Icon(Icons.star_half, color: Colors.amber),
+              ...List.generate(emptyStars.toInt(),
+                  (_) => const Icon(Icons.star_border, color: Colors.amber)),
+            ],
           ),
         );
       },
