@@ -56,7 +56,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to deleted item', textAlign: TextAlign.center),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.red,
         ),
       );
     }
@@ -67,7 +67,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
     final response = await dio.put('$apiURL/toggle_favorite/$itemID');
     if (response.statusCode == 200) {
       setState(() {
-        isFavorite = !isFavorite; // Update favorite status
+        isFavorite = !isFavorite;
       });
     } else {
       throw Exception('Failed to update favorite status');
@@ -109,7 +109,13 @@ class _DescriptionPageState extends State<DescriptionPage> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    double widthFactor = screenSize.width > 600 ? 0.4 : 0.5;
+    double widthFactor = 0.5;
+    if (screenSize.width > 600) {
+      widthFactor = 0.4;
+    }
+    if (screenSize.width > 1000) {
+      widthFactor = 0.2;
+    }
 
     double padding = screenSize.width > 600 ? 20 : 12;
 
@@ -141,6 +147,8 @@ class _DescriptionPageState extends State<DescriptionPage> {
                 user['fullName'] == null || user['fullName'] == ''
                     ? user['nickname']
                     : user['fullName'];
+            var avgRating = user['rating_avg'] ?? 0;
+            avgRating = avgRating == 0 ? 2.5 : avgRating;
             return SingleChildScrollView(
               padding: EdgeInsets.all(padding),
               child: Column(
@@ -191,7 +199,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                           SizedBox(height: padding / 2),
                           InkWell(
                             child: RatingBarIndicator(
-                              rating: user['avgRating'] ?? 0,
+                              rating: avgRating,
                               itemSize: 10,
                               direction: Axis.horizontal,
                               itemCount: 5,
