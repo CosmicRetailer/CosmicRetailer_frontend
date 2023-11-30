@@ -125,10 +125,10 @@ packages:
     dependency: transitive
     description:
       name: built_value
-      sha256: "723b4021e903217dfc445ec4cf5b42e27975aece1fc4ebbc1ca6329c2d9fb54e"
+      sha256: "69acb7007eb2a31dc901512bfe0f7b767168be34cb734835d54c070bfa74c1b2"
       url: "https://pub.dev"
     source: hosted
-    version: "8.7.0"
+    version: "8.8.0"
   cached_network_image:
     dependency: transitive
     description:
@@ -258,6 +258,46 @@ packages:
     source: hosted
     version: "4.0.6"
   ed25519_edwards:
+    dependency: transitive
+    description:
+      name: ed25519_edwards
+      sha256: "6ce0112d131327ec6d42beede1e5dfd526069b18ad45dcf654f15074ad9276cd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.1"
+  ed25519_hd_key:
+    dependency: "direct main"
+    description:
+      name: ed25519_hd_key
+      sha256: c5c9f11a03f5789bf9dcd9ae88d641571c802640851f1cacdb13123f171b3a26
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
+  eip1559:
+    dependency: transitive
+    description:
+      name: eip1559
+      sha256: c2b81ac85f3e0e71aaf558201dd9a4600f051ece7ebacd0c5d70065c9b458004
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.2"
+  eip55:
+    dependency: transitive
+    description:
+      name: eip55
+      sha256: "213a9b86add87a5216328e8494b0ab836e401210c4d55eb5e521bd39e39169e1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  event:
+    dependency: transitive
+    description:
+      name: event
+      sha256: eb4814de94cbf6a10da9c4f652bc654087d7066e33566b5036822e6c0b24befb
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.2"
+  fake_async:
     dependency: transitive
     description:
       name: ed25519_edwards
@@ -454,6 +494,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.9"
+  flutter_test:
+    dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -968,14 +1013,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
-  sprintf:
-    dependency: transitive
-    description:
-      name: sprintf
-      sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.0.0"
   sqflite:
     dependency: transitive
     description:
@@ -1007,7 +1044,7 @@ packages:
       sha256: ba2aa5d8cc609d96bbb2899c28934f9e1af5cddbd60a827822ea467161eb54e7
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.1"
   stream_transform:
     dependency: transitive
     description:
@@ -1132,10 +1169,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: df5a4d8f22ee4ccd77f8839ac7cb274ebc11ef9adcce8b92be14b797fe889921
+      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.1"
+    version: "3.0.7"
   vector_graphics:
     dependency: transitive
     description:
@@ -1204,10 +1241,10 @@ packages:
     dependency: "direct main"
     description:
       name: web3dart
-      sha256: "31f93cf84b8c874d7ffb363959249d7e479115fe12cf46f30b037dcad6750b22"
+      sha256: bebbea9278723cef51d21caf65668860e7547f59114fe9f8af01b873a72ba0e6
       url: "https://pub.dev"
     source: hosted
-    version: "2.7.2"
+    version: "2.7.1"
   web3modal_flutter:
     dependency: "direct main"
     description:
