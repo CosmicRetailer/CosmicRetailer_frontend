@@ -159,7 +159,6 @@ class _DescriptionPageState extends State<DescriptionPage> {
                     ? user['nickname']
                     : user['fullName'];
             var avgRating = user['rating_avg'] ?? 0;
-            avgRating = avgRating == 0 ? 2.5 : avgRating;
             return SingleChildScrollView(
               padding: EdgeInsets.all(padding),
               child: Column(
@@ -210,8 +209,8 @@ class _DescriptionPageState extends State<DescriptionPage> {
                           SizedBox(height: padding / 2),
                           InkWell(
                             child: RatingBarIndicator(
-                              rating: avgRating,
-                              itemSize: 10,
+                              rating: avgRating.toDouble(),
+                              itemSize: 15,
                               direction: Axis.horizontal,
                               itemCount: 5,
                               itemPadding:
