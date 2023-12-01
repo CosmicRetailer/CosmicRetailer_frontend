@@ -1,6 +1,7 @@
 import 'package:d_allegro/screens/create_wallet_screen.dart';
 import 'package:d_allegro/screens/main_screen.dart';
 import 'package:d_allegro/screens/product_page.dart';
+import 'package:d_allegro/screens/rate_user.dart';
 import 'package:d_allegro/screens/scaffold.dart';
 import 'package:d_allegro/screens/settings.dart';
 import 'package:d_allegro/screens/sign_in.dart';
@@ -75,7 +76,8 @@ class CosmicRetailerApp extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              Navigator.pushReplacementNamed(context, '/createWallet');
+                              Navigator.pushReplacementNamed(
+                                  context, '/createWallet');
                             },
                             child: const Text('OK'),
                           ),
@@ -86,7 +88,7 @@ class CosmicRetailerApp extends StatelessWidget {
                 }
               },
             ),
-          '/createWallet': (context) => CreateWalletScreen(
+        '/createWallet': (context) => CreateWalletScreen(
               nickname: authState.username,
               onCreateWallet: (credentials) {
                 showDialog(
@@ -114,6 +116,9 @@ class CosmicRetailerApp extends StatelessWidget {
         '/item': (context) => DescriptionPage(
             arguments: ModalRoute.of(context)!.settings.arguments
                 as ProductPageArguments),
+        '/rate': (context) => RateUserPage(
+            arguments: ModalRoute.of(context)!.settings.arguments
+                as RateUserPageArguments),
       },
       theme: ThemeData(
         useMaterial3: true,

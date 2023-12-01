@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:d_allegro/screens/rate_user.dart';
 import 'package:flutter/material.dart';
 import 'package:d_allegro/http_client.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductPageArguments {
@@ -56,7 +58,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Failed to deleted item', textAlign: TextAlign.center),
-          backgroundColor: Colors.green,
+          backgroundColor: Colors.red,
         ),
       );
     }
@@ -67,7 +69,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
     final response = await dio.put('$apiURL/toggle_favorite/$itemID');
     if (response.statusCode == 200) {
       setState(() {
-        isFavorite = !isFavorite; // Update favorite status
+        isFavorite = !isFavorite;
       });
     } else {
       throw Exception('Failed to update favorite status');
@@ -77,8 +79,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
   void _buyItem() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var itemID = widget.arguments.id;
-    final response = await dio.post(
-        '$apiURL/buy_item/$itemID',
+    final response = await dio.post('$apiURL/buy_item/$itemID',
         options: Options(
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
@@ -86,8 +87,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
         ),
         data: {
           'privateKey': prefs.getString('privateKey'),
-        }
-    );
+        });
 
     if (response.statusCode == 200 && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -121,7 +121,13 @@ class _DescriptionPageState extends State<DescriptionPage> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
-    double widthFactor = screenSize.width > 600 ? 0.4 : 0.5;
+    double widthFactor = 0.5;
+    if (screenSize.width > 600) {
+      widthFactor = 0.4;
+    }
+    if (screenSize.width > 1000) {
+      widthFactor = 0.2;
+    }
 
     double padding = screenSize.width > 600 ? 20 : 12;
 
@@ -143,7 +149,8 @@ class _DescriptionPageState extends State<DescriptionPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return const Center(
+                child: Text('Error: Unable to load item details'));
           } else {
             var item = snapshot.data?['item'];
             var user = snapshot.data?['user'];
@@ -152,6 +159,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                 user['fullName'] == null || user['fullName'] == ''
                     ? user['nickname']
                     : user['fullName'];
+            var avgRating = user['rating_avg'] ?? 0;
             return SingleChildScrollView(
               padding: EdgeInsets.all(padding),
               child: Column(
@@ -200,6 +208,24 @@ class _DescriptionPageState extends State<DescriptionPage> {
                             ],
                           ),
                           SizedBox(height: padding / 2),
+                          InkWell(
+                            child: RatingBarIndicator(
+                              rating: avgRating.toDouble(),
+                              itemSize: 15,
+                              direction: Axis.horizontal,
+                              itemCount: 5,
+                              itemPadding:
+                                  const EdgeInsets.symmetric(horizontal: 1.0),
+                              itemBuilder: (context, _) => const Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pushNamed(context, '/rate',
+                                  arguments: RateUserPageArguments(user['id']));
+                            },
+                          ),
                           Text(
                             'Owner: $nameToDisplay',
                             style: TextStyle(
