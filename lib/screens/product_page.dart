@@ -96,7 +96,8 @@ class _DescriptionPageState extends State<DescriptionPage> {
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.pushReplacementNamed(context, '/main');
+      // Navigator.pushReplacementNamed(context, '/main');
+      Navigator.pop(context);
     } else if (context.mounted) {
       if (response.statusCode == 400) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -112,7 +113,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
             backgroundColor: Colors.red,
           ),
         );
-        Navigator.pushReplacementNamed(context, '/main');
+        Navigator.pop(context);
       }
     }
   }
