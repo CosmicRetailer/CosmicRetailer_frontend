@@ -62,38 +62,41 @@ class _FavoriteItemsPageState extends State<FavoriteItemsPage> {
                       ? double.parse(item['price'].toString())
                       : 0.0;
 
-                  return InkWell(
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DescriptionPage(
-                            arguments: ProductPageArguments(
-                              item['_id'],
+                  return Card(
+                    margin: EdgeInsets.all(8),
+                    child: InkWell(
+                      onTap: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DescriptionPage(
+                              arguments: ProductPageArguments(
+                                item['_id'],
+                              ),
                             ),
                           ),
-                        ),
-                      );
+                        );
 
-                      refreshFavoriteItems();
-                    },
-                    child: Column(
-                      children: [
-                        Image.network(
-                          item['photoUrl'] ?? 'https://picsum.photos/200',
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                        Text(
-                          title,
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                        Text(
-                          'Price: \$${price.toStringAsFixed(2)}',
-                          style: const TextStyle(fontSize: 20),
-                        ),
-                      ],
+                        refreshFavoriteItems();
+                      },
+                      child: Column(
+                        children: [
+                          Image.network(
+                            item['photoUrl'] ?? 'https://picsum.photos/200',
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          Text(
+                            title,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            'Price: \$${price.toStringAsFixed(2)}',
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
