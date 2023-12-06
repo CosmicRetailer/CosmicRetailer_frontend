@@ -40,6 +40,7 @@ class CosmicRetailerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final authState = CosmicRetailerAuthScope.of(context);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => const MainScreen(),

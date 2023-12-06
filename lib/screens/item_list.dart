@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:d_allegro/http_client.dart';
-import 'product_page.dart'; // Import DescriptionPage
+import 'product_page.dart';
+import 'filtered_page.dart';
 
 class ItemListPage extends StatefulWidget {
-  const ItemListPage({Key? key});
+  const ItemListPage({Key? key, this.items}) : super(key: key);
+
+  final List<dynamic>? items;
 
   @override
   _ItemListPageState createState() => _ItemListPageState();
 }
 
 class _ItemListPageState extends State<ItemListPage> {
-  late Future<List<dynamic>?> items;
+  late Future<List<dynamic>?> itemsFuture;
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Na starcie używamy all_items
-    items = fetchAllItems();
+    itemsFuture = fetchAllItems();
   }
 
   Future<List<dynamic>?> fetchAllItems() async {
@@ -40,6 +42,22 @@ class _ItemListPageState extends State<ItemListPage> {
     }
   }
 
+  void onFilterPressed() async {
+    final searchQuery = searchController.text;
+
+    final filteredItems = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FilteredPage()),
+    );
+
+    if (filteredItems != null) {
+      setState(() {
+        itemsFuture = Future.value(filteredItems);
+        searchController.clear();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,12 +70,10 @@ class _ItemListPageState extends State<ItemListPage> {
               onPressed: () async {
                 final searchQuery = searchController.text;
                 setState(() {
-                  // Jeśli searchQuery jest puste, używamy all_items
                   if (searchQuery.isEmpty) {
-                    items = fetchAllItems();
+                    itemsFuture = fetchAllItems();
                   } else {
-                    // W przeciwnym razie używamy find
-                    items = fetchItems(searchQuery);
+                    itemsFuture = fetchItems(searchQuery);
                   }
                 });
               },
@@ -76,9 +92,7 @@ class _ItemListPageState extends State<ItemListPage> {
             child: Row(
               children: [
                 TextButton(
-                  onPressed: () {
-                    print('Filter pressed');
-                  },
+                  onPressed: onFilterPressed,
                   child: Row(
                     children: [
                       Icon(Icons.filter_list),
@@ -109,7 +123,7 @@ class _ItemListPageState extends State<ItemListPage> {
           ),
           Expanded(
             child: FutureBuilder<List<dynamic>?>(
-              future: items,
+              future: itemsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
