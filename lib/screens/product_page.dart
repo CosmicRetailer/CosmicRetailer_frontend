@@ -81,6 +81,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
   void _buyItem() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var itemID = widget.arguments.id;
+    print("privateKey: ${prefs.getString('privateKey')}");
     final response = await dio.post('$apiURL/buy_item/$itemID',
         options: Options(
           headers: {
@@ -91,8 +92,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
           'privateKey': prefs.getString('privateKey'),
         });
 
-    if (response.statusCode == 200 &&
-        context.mounted &&
+    if (context.mounted &&
         response.data['code'] == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
