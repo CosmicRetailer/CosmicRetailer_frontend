@@ -14,20 +14,19 @@ final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 class CosmicRetailerScaffold extends StatefulWidget {
   const CosmicRetailerScaffold({
-    super.key,
-    this.selectedIndex = 0,
+    Key? key,
+    this.initialSelectedIndex = 0,
     this.filteredItems, // Pass filtered items as a parameter
-  });
+  }) : super(key: key);
 
-  final int selectedIndex;
+  final int initialSelectedIndex;
   final List<dynamic>? filteredItems; // Receive filtered items
 
   @override
-  State<CosmicRetailerScaffold> createState() =>
-      _CosmicRetailerScaffoldeState();
+  State<CosmicRetailerScaffold> createState() => _CosmicRetailerScaffoldState();
 }
 
-class _CosmicRetailerScaffoldeState extends State<CosmicRetailerScaffold> {
+class _CosmicRetailerScaffoldState extends State<CosmicRetailerScaffold> {
   void startPolling() {
     Timer.periodic(const Duration(seconds: 10), (timer) async {
       var response = await dio.get('$apiURL/get_notification');
@@ -53,29 +52,36 @@ class _CosmicRetailerScaffoldeState extends State<CosmicRetailerScaffold> {
         1, 'Item Sold!', 'Your item $itemName has been sold!', platform);
   }
 
-  late List<Widget> _widgetOptions;
+  late int _selectedIndex;
+  late Widget _currentPage;
 
   @override
   void initState() {
     super.initState();
     Notif.initialize(flutterLocalNotificationsPlugin);
     startPolling();
+    _selectedIndex = widget.initialSelectedIndex;
+    _updateCurrentPage();
+  }
 
-    // Initialize _widgetOptions based on whether filteredItems is provided
-    if (widget.filteredItems != null) {
-      _widgetOptions = [
-        ItemListPage(items: widget.filteredItems!), // Pass filtered items
-        const FavoriteItemsPage(),
-        const Additem(),
-        const UserProfilePage(),
-      ];
-    } else {
-      _widgetOptions = [
-        const ItemListPage(),
-        const FavoriteItemsPage(),
-        const Additem(),
-        const UserProfilePage(),
-      ];
+  void _updateCurrentPage() {
+    switch (_selectedIndex) {
+      case 0:
+        _currentPage = widget.filteredItems != null
+            ? ItemListPage(items: widget.filteredItems!)
+            : const ItemListPage();
+        break;
+      case 1:
+        _currentPage = const FavoriteItemsPage();
+        break;
+      case 2:
+        _currentPage = const Additem();
+        break;
+      case 3:
+        _currentPage = const UserProfilePage();
+        break;
+      default:
+        throw ArgumentError("Invalid selectedIndex: $_selectedIndex");
     }
   }
 
@@ -83,19 +89,13 @@ class _CosmicRetailerScaffoldeState extends State<CosmicRetailerScaffold> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AdaptiveNavigationScaffold(
-        selectedIndex: widget.selectedIndex,
-        body: _widgetOptions.elementAt(widget.selectedIndex),
+        selectedIndex: _selectedIndex,
+        body: _currentPage,
         onDestinationSelected: (idx) {
           setState(() {
-            _widgetOptions = [
-              const ItemListPage(), // Reset ItemListPage to the default state
-              const FavoriteItemsPage(),
-              const Additem(),
-              const UserProfilePage(),
-            ];
+            _selectedIndex = idx;
+            _updateCurrentPage();
           });
-
-          // Handle additional logic based on the selected index if needed
         },
         destinations: const [
           AdaptiveScaffoldDestination(
