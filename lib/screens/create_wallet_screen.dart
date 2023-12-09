@@ -6,13 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:d_allegro/providers/wallet_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/web3dart.dart';
 
 class CreateWalletScreen extends StatefulWidget {
   final ValueChanged<void> onCreateWallet;
   final String nickname;
-  const CreateWalletScreen({Key? key, required this.onCreateWallet, required this.nickname}) : super(key: key);
+  const CreateWalletScreen(
+      {Key? key, required this.onCreateWallet, required this.nickname})
+      : super(key: key);
 
   @override
   _CreateWalletScreenState createState() => _CreateWalletScreenState(nickname);
@@ -21,7 +22,7 @@ class CreateWalletScreen extends StatefulWidget {
 class _CreateWalletScreenState extends State<CreateWalletScreen> {
   String walletAddress = '';
   String nickname = '';
-  
+
   _CreateWalletScreenState(this.nickname);
 
   Future<void> showWalletErrorDialog(BuildContext context) {
@@ -30,8 +31,8 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Cannot create wallet'),
-          content:
-              const Text('There was a problem with creating wallet. Try again.'),
+          content: const Text(
+              'There was a problem with creating wallet. Try again.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -45,7 +46,7 @@ class _CreateWalletScreenState extends State<CreateWalletScreen> {
       },
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final walletProvider = Provider.of<WalletProvider>(context);

@@ -102,7 +102,7 @@ class _AdditemState extends State<Additem> {
     });
     final response = await dio.post('$apiURL/add_item', data: formData);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['code'] == 200) {
       return response.data;
     } else {
       throw Exception('Failed to add item');

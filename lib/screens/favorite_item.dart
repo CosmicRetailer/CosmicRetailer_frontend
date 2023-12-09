@@ -21,7 +21,7 @@ class _FavoriteItemsPageState extends State<FavoriteItemsPage> {
   Future<List<dynamic>?> fetchFavoriteItems() async {
     final response = await dio.get('$apiURL/get_favorites');
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['code'] == 200) {
       return response.data['favorites'];
     } else {
       throw Exception('Failed to load favorite items');

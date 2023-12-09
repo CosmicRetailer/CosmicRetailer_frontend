@@ -14,7 +14,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   Future<Map<String, dynamic>> fetchUserDetails(String userID) async {
     final response = await dio.get('$apiURL/get_user');
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['code'] == 200) {
       return response.data;
     } else {
       throw Exception('Failed to load user details');

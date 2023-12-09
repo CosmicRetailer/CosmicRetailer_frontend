@@ -41,7 +41,7 @@ class _SettingsState extends State<SettingsPage> {
   Future<Map<String, dynamic>> fetchUserDetails(String userID) async {
     final response = await dio.get('$apiURL/get_user');
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['code'] == 200) {
       var user = response.data?['user'];
       _fullNameController = TextEditingController(text: user['fullName']);
       _nicknameController = TextEditingController(text: user['nickname']);
