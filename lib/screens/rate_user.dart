@@ -22,7 +22,7 @@ class _RateUserPageState extends State<RateUserPage> {
   Future<Map<String, dynamic>> fetchUserDetails(String userID) async {
     final response = await dio.get('$apiURL/get_user_by_id/$userID');
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['code'] == 200) {
       return response.data;
     } else {
       throw Exception('Failed to load user details');
@@ -132,10 +132,14 @@ class _RateUserPageState extends State<RateUserPage> {
             flex: 1,
             child: Column(
               children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(userProfilePicUrl),
-                  radius: 40,
-                ),
+                userProfilePicUrl != ''
+                    ? CircleAvatar(
+                        backgroundImage: NetworkImage(userProfilePicUrl),
+                        radius: 40,
+                      )
+                    : CircleAvatar(
+                        child: Text(userName[0]),
+                      ),
                 const SizedBox(height: 8),
                 Text(userName),
               ],
