@@ -32,7 +32,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
   Future<Map<String, dynamic>> fetchItemDetails(String itemID) async {
     final response = await dio.get('$apiURL/get_item/$itemID');
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['code'] == 200) {
       setState(() {
         isFavorite = response.data?['isFavorite'];
       });
@@ -46,7 +46,9 @@ class _DescriptionPageState extends State<DescriptionPage> {
     var itemID = widget.arguments.id;
     final response = await dio.delete('$apiURL/delete_item/$itemID');
 
-    if (response.statusCode == 200 && context.mounted) {
+    if (response.statusCode == 200 &&
+        context.mounted &&
+        response.data['code'] == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Deleted item', textAlign: TextAlign.center),
@@ -67,7 +69,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
   void _toggleFavorite() async {
     var itemID = widget.arguments.id;
     final response = await dio.put('$apiURL/toggle_favorite/$itemID');
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['code'] == 200) {
       setState(() {
         isFavorite = !isFavorite;
       });
@@ -89,7 +91,9 @@ class _DescriptionPageState extends State<DescriptionPage> {
           'privateKey': prefs.getString('privateKey'),
         });
 
-    if (response.statusCode == 200 && context.mounted) {
+    if (response.statusCode == 200 &&
+        context.mounted &&
+        response.data['code'] == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Bought item', textAlign: TextAlign.center),
@@ -99,7 +103,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
       // Navigator.pushReplacementNamed(context, '/main');
       Navigator.pop(context);
     } else if (context.mounted) {
-      if (response.statusCode == 400) {
+      if (response.statusCode == 400 || response.data['code'] == 400) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Not enough money', textAlign: TextAlign.center),

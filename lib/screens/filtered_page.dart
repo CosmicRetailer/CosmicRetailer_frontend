@@ -30,7 +30,7 @@ class _FilteredPageState extends State<FilteredPage> {
             : '$apiURL/all_items',
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data['code'] == 200) {
         List<dynamic>? items = response.data['items'];
 
         if (items != null && items.isNotEmpty) {

@@ -25,7 +25,7 @@ class _ItemListPageState extends State<ItemListPage> {
   Future<List<dynamic>?> fetchAllItems() async {
     final response = await dio.get('$apiURL/all_items');
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['code'] == 200) {
       return response.data['items'];
     } else {
       throw Exception('Failed to load items');
@@ -35,7 +35,7 @@ class _ItemListPageState extends State<ItemListPage> {
   Future<List<dynamic>?> fetchItems(String searchQuery) async {
     final response = await dio.get('$apiURL/find/$searchQuery');
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['code'] == 200) {
       return response.data['items'];
     } else {
       throw Exception('Failed to load items');

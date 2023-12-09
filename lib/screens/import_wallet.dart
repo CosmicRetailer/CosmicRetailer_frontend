@@ -23,8 +23,8 @@ class _ImportWalletState extends State<ImportWallet> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Cannot import wallet'),
-          content:
-              const Text('There was a problem with importing wallet. Try again.'),
+          content: const Text(
+              'There was a problem with importing wallet. Try again.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -64,13 +64,13 @@ class _ImportWalletState extends State<ImportWallet> {
         }),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data['code'] == 200) {
         navigateToSettings();
       } else {
         if (context.mounted) {
           showWalletErrorDialog(context);
         }
-      }      
+      }
     }
 
     return Scaffold(
