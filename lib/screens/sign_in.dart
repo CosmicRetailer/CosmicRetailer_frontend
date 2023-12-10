@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Credentials {
   final String username;
@@ -148,16 +147,12 @@ class _SignInScreenState extends State<SignInScreen> {
       final token = responseBody['access_token'];
       final Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
       final String userId = decodedToken['user_id'];
-      print('User ID: $userId');
       final credentials = Credentials(username, password, token, userId);
 
       final walletProvider =
           Provider.of<WalletProvider>(context, listen: false);
 
       await walletProvider.getPrivateKey(_verificationController.text);
-      
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      print("privateKey: ${prefs.getString('privateKey')}");
       widget.onSignIn(credentials);
     } else {
       if (context.mounted) {

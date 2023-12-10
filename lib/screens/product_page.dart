@@ -1,9 +1,13 @@
+import 'package:d_allegro/providers/wallet_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:d_allegro/screens/rate_user.dart';
 import 'package:flutter/material.dart';
 import 'package:d_allegro/http_client.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3dart/web3dart.dart';
 
 class ProductPageArguments {
   final String id;
@@ -79,9 +83,10 @@ class _DescriptionPageState extends State<DescriptionPage> {
   }
 
   void _buyItem() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
     var itemID = widget.arguments.id;
-    print("privateKey: ${prefs.getString('privateKey')}");
+
+    String? privateKey = await _secureStorage.read(key: 'privateKey'); 
     final response = await dio.post('$apiURL/buy_item/$itemID',
         options: Options(
           headers: {
@@ -89,7 +94,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
           },
         ),
         data: {
-          'privateKey': prefs.getString('privateKey'),
+          'privateKey': privateKey,
         });
 
     if (context.mounted &&
