@@ -42,6 +42,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               : user['fullName'];
           var userProfilePicUrl = user['photoUrl'] ?? '';
           var userItems = user['items'] ?? [];
+          var history = user['items'] ?? [];
 
           return Scaffold(
             appBar: AppBar(
@@ -152,13 +153,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       ),
                     if (_selectedButton[1]) // Display history
                       Column(
-                        children: userItems.map<Widget>((item) {
+                        children: history.map<Widget>((item) {
                           return Card(
                             margin: EdgeInsets.all(8),
                             child: ListTile(
-                              title: Text(item['name']),
-                              subtitle: Text(
-                                'Price: \$${item['price']} | Quantity: ${item['quantity']}',
+                              title: Text(item['itemName'] ?? ''),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Price: \$${item['price'] ?? ''}'),
+                                  Text('Type: ${item['type'] ?? ''}'),
+                                  // Dodaj inne informacje historyczne, jeśli są dostępne
+                                ],
                               ),
                               leading: Container(
                                 width: 60,
@@ -174,7 +180,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                   ),
                                 ),
                               ),
-                              // Add more details as needed
+                              // Dodaj więcej szczegółów, jeśli są dostępne
                             ),
                           );
                         }).toList(),
