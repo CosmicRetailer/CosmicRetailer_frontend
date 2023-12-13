@@ -21,6 +21,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
   }
 
+  Future<List<dynamic>> fetchHistory(String userID) async {
+    final response = await dio.get('$apiURL/get_history');
+
+    if (response.statusCode == 200 && response.data['code'] == 200) {
+      return response.data['history'];
+    } else {
+      throw Exception('Failed to load history');
+    }
+  }
+
   final List<bool> _selectedButton = <bool>[true, false];
 
   @override
@@ -153,37 +163,85 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       ),
                     if (_selectedButton[1]) // Display history
                       Column(
-                        children: history.map<Widget>((item) {
-                          return Card(
-                            margin: EdgeInsets.all(8),
-                            child: ListTile(
-                              title: Text(item['itemName'] ?? ''),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Price: \$${item['price'] ?? ''}'),
-                                  Text('Type: ${item['type'] ?? ''}'),
-                                  // Dodaj inne informacje historyczne, jeśli są dostępne
-                                ],
-                              ),
-                              leading: Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                      item['photoUrl'] ??
-                                          'https://picsum.photos/200',
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // Dodaj więcej szczegółów, jeśli są dostępne
-                            ),
-                          );
-                        }).toList(),
+                        children: [
+                          FutureBuilder(
+                            future: fetchHistory(authState.userID),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                var history = snapshot.data ?? [];
+
+                                return Column(
+                                  children: history.map<Widget>((item) {
+                                    return Card(
+                                      margin: EdgeInsets.all(8),
+                                      child: ListTile(
+                                        title: Text(item['itemName'] ?? ''),
+                                        subtitle: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Price: \$${item['price'] ?? ''}'),
+                                            Text('Type: ${item['type'] ?? ''}'),
+                                            // Dodaj inne informacje historyczne, jeśli są dostępne
+                                          ],
+                                        ),
+                                        leading: Container(
+                                          width: 60,
+                                          height: 60,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                item['photoUrl'] ??
+                                                    'https://picsum.photos/200',
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        // Dodaj więcej szczegółów, jeśli są dostępne
+                                      ),
+                                    );
+                                  }).toList(),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                        // children: history.map<Widget>((item) {
+                        //   return Card(
+                        //     margin: EdgeInsets.all(8),
+                        //     child: ListTile(
+                        //       title: Text(item['itemName'] ?? ''),
+                        //       subtitle: Column(
+                        //         crossAxisAlignment: CrossAxisAlignment.start,
+                        //         children: [
+                        //           Text('Price: \$${item['price'] ?? ''}'),
+                        //           Text('Type: ${item['type'] ?? ''}'),
+                        //           // Dodaj inne informacje historyczne, jeśli są dostępne
+                        //         ],
+                        //       ),
+                        //       leading: Container(
+                        //         width: 60,
+                        //         height: 60,
+                        //         decoration: BoxDecoration(
+                        //           shape: BoxShape.circle,
+                        //           image: DecorationImage(
+                        //             fit: BoxFit.cover,
+                        //             image: NetworkImage(
+                        //               item['photoUrl'] ??
+                        //                   'https://picsum.photos/200',
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       // Dodaj więcej szczegółów, jeśli są dostępne
+                        //     ),
+                        //   );
+                        // }).toList(),
                       ),
                   ],
                 ),
