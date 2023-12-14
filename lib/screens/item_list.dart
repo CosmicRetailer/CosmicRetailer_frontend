@@ -62,7 +62,7 @@ class _ItemListPageState extends State<ItemListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista Przedmiotów'),
+        title: const Text('CosmicRetailer'),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -115,7 +115,7 @@ class _ItemListPageState extends State<ItemListPage> {
                 controller: searchController,
                 onChanged: (value) {},
                 decoration: const InputDecoration(
-                  labelText: 'Szukaj przedmiotu...',
+                  labelText: 'Search for items',
                   prefixIcon: Icon(Icons.search),
                 ),
               ),
@@ -172,7 +172,7 @@ class _ItemListPageState extends State<ItemListPage> {
                                   style: const TextStyle(fontSize: 20),
                                 ),
                                 Text(
-                                  'Price: \$${price.toStringAsFixed(2)}',
+                                  'Price: USDt ${price.toStringAsFixed(2)}',
                                   style: const TextStyle(fontSize: 20),
                                 ),
                               ],

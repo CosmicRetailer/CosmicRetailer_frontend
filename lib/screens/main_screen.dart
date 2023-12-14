@@ -7,7 +7,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My App Home Page'),
+        title: const Text('Welcome to CosmicRetailer!'),
       ),
       body: Center(
         child: Column(

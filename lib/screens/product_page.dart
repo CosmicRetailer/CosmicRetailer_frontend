@@ -247,7 +247,7 @@ class _DescriptionPageState extends State<DescriptionPage> {
                           ),
                           SizedBox(height: padding),
                           Text(
-                            '\$${item['price']}',
+                            'USDt ${item['price']}',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: priceSize),

@@ -140,7 +140,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             child: ListTile(
                               title: Text(item['name']),
                               subtitle: Text(
-                                'Price: \$${item['price']} | Quantity: ${item['quantity']}',
+                                'Price: USDt ${item['price']} | Quantity: ${item['quantity']}',
                               ),
                               leading: Container(
                                 width: 60,
@@ -183,7 +183,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                         subtitle: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text('Price: \$${item['price'] ?? ''}'),
+                                            Text('Price: USDt ${item['price'] ?? ''}'),
                                             Text('Type: ${item['type'] ?? ''}'),
                                             // Dodaj inne informacje historyczne, jeśli są dostępne
                                           ],
@@ -219,7 +219,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         //       subtitle: Column(
                         //         crossAxisAlignment: CrossAxisAlignment.start,
                         //         children: [
-                        //           Text('Price: \$${item['price'] ?? ''}'),
+                        //           Text('Price: USDt${item['price'] ?? ''}'),
                         //           Text('Type: ${item['type'] ?? ''}'),
                         //           // Dodaj inne informacje historyczne, jeśli są dostępne
                         //         ],

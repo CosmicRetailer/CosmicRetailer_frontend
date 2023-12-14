@@ -92,7 +92,7 @@ class _FavoriteItemsPageState extends State<FavoriteItemsPage> {
                             style: const TextStyle(fontSize: 20),
                           ),
                           Text(
-                            'Price: \$${price.toStringAsFixed(2)}',
+                            'Price: USDt ${price.toStringAsFixed(2)}',
                             style: const TextStyle(fontSize: 20),
                           ),
                         ],
